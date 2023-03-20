@@ -13,4 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Go4LaunchFinal"
-include ':app'
+include ':android'
+include ':ui'
+include ':domain'
+include ':data'
