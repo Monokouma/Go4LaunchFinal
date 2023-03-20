@@ -37,5 +37,5 @@ jobs:
       - name: Build and test
         env:
           VERSION_CODE: ${{ github.run_number }}
-        run: ./gradlew build --no-deamon
+        run: ./gradlew build 
 
