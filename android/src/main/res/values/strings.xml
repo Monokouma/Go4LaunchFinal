@@ -33,4 +33,5 @@
     <string name="website">WEBSITE</string>
     <string name="like">LIKE</string>
     <string name="call">CALL</string>
+    <string name="default_web_client_id" translatable="false">57559716164-d8pa0c4f9jr0ju11odg5amhaiphjsjp7.apps.googleusercontent.com</string>
 </resources>
