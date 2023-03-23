@@ -3,7 +3,7 @@ package com.despaircorp.ui.login
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.despaircorp.domain.user.SaveUserUseCase
+import com.despaircorp.domain.user.SaveCurrentUserUseCase
 import com.despaircorp.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,27 +13,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val saveUserUseCase: SaveUserUseCase
-): ViewModel() {
-    
+    private val saveCurrentUserUseCase: SaveCurrentUserUseCase
+) : ViewModel() {
+
     val loginViewActionLiveData = MutableLiveData<Event<LoginAction>>()
-    
+
     fun onUserConnected() {
         viewModelScope.launch(Dispatchers.IO) {
-            saveUserUseCase.invoke().collect {
-                if (it) {
-                    withContext(Dispatchers.Main) {
-                        loginViewActionLiveData.value = Event(LoginAction.GoToMainActivity)
-                    }
+            val success = saveCurrentUserUseCase.invoke()
+
+            withContext(Dispatchers.Main) {
+                loginViewActionLiveData.value = if (success) {
+                    Event(LoginAction.GoToMainActivity)
                 } else {
-                    withContext(Dispatchers.Main) {
-                        loginViewActionLiveData.value = Event(LoginAction.ErrorMessage)
-                    }
+                    Event(LoginAction.ErrorMessage)
                 }
-                
             }
-            
-            
         }
     }
 }

@@ -1,40 +1,35 @@
 package com.despaircorp.data.user
 
-import android.util.Log
+import com.despaircorp.domain.authentication.model.UserEntity
 import com.despaircorp.domain.user.UserRepository
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 class UserRepositoryFirestore @Inject constructor(
-    private val oAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
-): UserRepository {
-    
-    override fun saveUser(): Flow<Boolean> = callbackFlow {
+) : UserRepository {
+    override suspend fun saveUser(userEntity: UserEntity): Boolean {
         val userDto = UserDto(
-            uuid = oAuth.currentUser?.uid,
-            name = oAuth.currentUser?.displayName,
-            emailAddress = oAuth.currentUser?.email,
-            picture = oAuth.currentUser?.photoUrl?.toString()
+            uuid = userEntity.id,
+            name = userEntity.name,
+            emailAddress = userEntity.email,
+            picture = userEntity.photoUrl
         )
-    
-        firestore.collection("users").document(oAuth.currentUser?.uid ?: "error")
-            .set(userDto)
-            .addOnSuccessListener {
-                Log.i("Monokouma", "success")
-                trySend(true)
-            }
-            .addOnFailureListener {
-                Log.i("Monokouma", "failure")
-                trySend(false)
-                it.printStackTrace()
-            }
-        
-        awaitClose { firestore.terminate() }
+
+        return try {
+            firestore
+                .collection("users")
+                .document(userEntity.id)
+                .set(userDto)
+                .await()
+            true
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            e.printStackTrace()
+            false
+        }
     }
-    
 }
