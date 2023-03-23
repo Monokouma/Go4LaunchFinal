@@ -15,5 +15,5 @@ abstract class DataBindModule {
 
     @Binds
     @Singleton
-    abstract fun bindRestaurantRepository(impl: UserRepositoryFirestore): UserRepository
+    abstract fun bindUserRepository(impl: UserRepositoryFirestore): UserRepository
 }

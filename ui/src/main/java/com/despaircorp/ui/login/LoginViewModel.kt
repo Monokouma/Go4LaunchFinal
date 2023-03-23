@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,11 +20,20 @@ class LoginViewModel @Inject constructor(
     
     fun onUserConnected() {
         viewModelScope.launch(Dispatchers.IO) {
-            saveUserUseCase.invoke()
-            
-            withContext(Dispatchers.Main) {
-                loginViewActionLiveData.value = Event(LoginAction.GoToMainActivity)
+            saveUserUseCase.invoke().collect {
+                if (it) {
+                    withContext(Dispatchers.Main) {
+                        loginViewActionLiveData.value = Event(LoginAction.GoToMainActivity)
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        loginViewActionLiveData.value = Event(LoginAction.ErrorMessage)
+                    }
+                }
+                
             }
+            
+            
         }
     }
 }

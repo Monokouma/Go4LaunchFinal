@@ -1,5 +1,7 @@
 package com.despaircorp.domain.user
 
+import kotlinx.coroutines.flow.Flow
+
 interface UserRepository {
-    fun saveUser()
+    fun saveUser(): Flow<Boolean>
 }
