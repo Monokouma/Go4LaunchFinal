@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/baby_powder"
+    >
+    
+    <ImageView
+        android:id="@+id/restaurants_items_ImageView_photo"
+        android:layout_width="100dp"
+        android:layout_height="140dp"
+        android:layout_margin="8dp"
+        android:scaleY="2"
+        app:layout_constraintBottom_toTopOf="@id/restaurant_list_items_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/backgrounds/scenic"
+        />
+    
+    <TextView
+        android:id="@+id/restaurant_list_items_restaurant_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/restaurant_list_items_restaurant_distance_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Le Zinc"
+        />
+    
+    <TextView
+        android:id="@+id/restaurant_list_items_restaurant_distance_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/restaurants_items_ImageView_photo"
+        app:layout_constraintStart_toEndOf="@id/restaurant_list_items_restaurant_name_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="120m"
+        />
+    
+    <TextView
+        android:id="@+id/restaurant_list_items_restaurant_adress_and_type_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/restaurant_list_items_workmate_inside_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_list_items_restaurant_name_tv"
+        tools:text="French - 12 rue du Faubourd Poissonnière"
+        />
+    
+    <TextView
+        android:id="@+id/restaurant_list_items_workmate_inside_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/black"
+        app:drawableStartCompat="@drawable/baseline_person_outline_24"
+        app:layout_constraintEnd_toStartOf="@id/restaurants_items_ImageView_photo"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/restaurant_list_items_restaurant_adress_and_type_tv"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_list_items_restaurant_distance_tv"
+        tools:text="(2)"
+        />
+    
+    <TextView
+        android:id="@+id/restaurant_list_items_restaurant_open_schedule"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/shamrock_green"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@id/restaurant_list_items_divider"
+        app:layout_constraintEnd_toStartOf="@id/restaurant_list_items_restaurant_star_rating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_list_items_restaurant_adress_and_type_tv"
+        tools:text="Open"
+        />
+    
+    <RatingBar
+        android:id="@+id/restaurant_list_items_restaurant_star_rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:stepSize="0.1"
+        android:theme="@style/RatingBar"
+        app:layout_constraintBottom_toTopOf="@id/restaurant_list_items_divider"
+        app:layout_constraintEnd_toStartOf="@id/restaurants_items_ImageView_photo"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/restaurant_list_items_restaurant_open_schedule"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_list_items_restaurant_adress_and_type_tv"
+        app:layout_constraintVertical_bias="1.0"
+        tools:rating="4.5"
+        />
+    
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/restaurant_list_items_divider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
