@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.despaircorp.ui.R
-import com.despaircorp.ui.databinding.ActivityLoginBinding
+import com.despaircorp.ui.bottom_navigation.BottomNavigationActivity
+import com.despaircorp.ui.databinding.LoginActivityBinding
 import com.despaircorp.ui.utils.viewBinding
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -21,13 +21,11 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    private val binding by viewBinding { ActivityLoginBinding.inflate(it) }
+    private val binding by viewBinding { LoginActivityBinding.inflate(it) }
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager
@@ -96,13 +94,16 @@ class LoginActivity : AppCompatActivity() {
     
         viewModel.loginViewActionLiveData.observe(this) {
             when (it.getContentIfNotHandled()) {
-                LoginAction.GoToMainActivity -> Log.i("Monokouma", "startActivity(BottomNavigationActivity.navigate(this))")
+                LoginAction.GoToMainActivity -> startActivity(BottomNavigationActivity.navigate(this))
+                LoginAction.ErrorMessage -> {
+                    Toast.makeText(this, "Error login", Toast.LENGTH_SHORT).show()
+                }
                 null -> Unit
             }
         }
     
         if (FirebaseAuth.getInstance().currentUser != null) {
-           // startActivity(BottomNavigationActivity.navigate(this))
+            startActivity(BottomNavigationActivity.navigate(this))
         }
     }
     
@@ -113,11 +114,9 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == GOOGLE_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
                 e.printStackTrace()
             }
         } else {
@@ -132,7 +131,6 @@ class LoginActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 viewModel.onUserConnected()
             } else {
-                // If sign in fails, display a message to the user.
                 Toast.makeText(
                     this,
                     "Authentication failed.",
@@ -146,7 +144,7 @@ class LoginActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-               // loginViewModel.onUserConnected()
+                viewModel.onUserConnected()
             } else {
                 task.exception?.printStackTrace()
             }

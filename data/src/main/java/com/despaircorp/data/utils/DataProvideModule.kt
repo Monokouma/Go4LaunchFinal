@@ -31,4 +31,6 @@ class DataProvideModule {
     fun provideAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }
+    
+    
 }

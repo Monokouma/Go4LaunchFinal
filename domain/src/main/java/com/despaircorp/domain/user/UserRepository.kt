@@ -1,5 +1,9 @@
 package com.despaircorp.domain.user
 
+import com.despaircorp.domain.authentication.model.UserEntity
+
 interface UserRepository {
-    fun saveUser()
+    suspend fun saveUser(userEntity: UserEntity): Boolean
+    
+    suspend fun getUser(uuid: String): UserEntity?
 }

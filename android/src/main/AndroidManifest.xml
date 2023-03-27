@@ -17,4 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         tools:ignore="DataExtractionRules,UnusedAttribute"
         />
+    
+    
 </manifest>
