@@ -4,4 +4,6 @@ import com.despaircorp.domain.authentication.model.UserEntity
 
 interface UserRepository {
     suspend fun saveUser(userEntity: UserEntity): Boolean
+    
+    suspend fun getUser(uuid: String): UserEntity?
 }

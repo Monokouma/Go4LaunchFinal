@@ -1,6 +1,8 @@
 package com.despaircorp.data.utils
 
+import com.despaircorp.data.authentication.AuthenticationRepositoryFirebase
 import com.despaircorp.data.user.UserRepositoryFirestore
+import com.despaircorp.domain.authentication.AuthenticationRepository
 import com.despaircorp.domain.user.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -16,4 +18,8 @@ abstract class DataBindModule {
     @Binds
     @Singleton
     abstract fun bindUserRepository(impl: UserRepositoryFirestore): UserRepository
+    
+    @Binds
+    @Singleton
+    abstract fun bindAuthenthicationRepository(impl: AuthenticationRepositoryFirebase): AuthenticationRepository
 }

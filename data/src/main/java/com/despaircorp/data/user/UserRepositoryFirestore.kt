@@ -3,8 +3,11 @@ package com.despaircorp.data.user
 import com.despaircorp.domain.authentication.model.UserEntity
 import com.despaircorp.domain.user.UserRepository
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
+import java.util.concurrent.Executor
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
@@ -32,4 +35,27 @@ class UserRepositoryFirestore @Inject constructor(
             false
         }
     }
+    
+    override suspend fun getUser(uuid: String): UserEntity? {
+        val documentSnapshot = firestore.collection("users")
+            .document(uuid)
+            .get()
+            .await()
+    
+        val userDto = documentSnapshot.toObject<UserDto>()
+        
+        return try {
+            UserEntity(
+                id = userDto?.uuid ?: return null,
+                name = userDto.name ?: return null,
+                email = userDto.emailAddress ?: return null,
+                photoUrl = userDto.picture,
+            )
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            null
+        }
+        
+    }
+    
 }

@@ -7,7 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.despaircorp.ui.bottom_navigation.BottomNavigationActivity
-import com.despaircorp.ui.databinding.ActivityLoginBinding
+import com.despaircorp.ui.databinding.LoginActivityBinding
 import com.despaircorp.ui.utils.viewBinding
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -25,7 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    private val binding by viewBinding { ActivityLoginBinding.inflate(it) }
+    private val binding by viewBinding { LoginActivityBinding.inflate(it) }
     private val viewModel: LoginViewModel by viewModels()
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var callbackManager: CallbackManager

@@ -6,16 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.BottomNavigationActivityBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
+import com.despaircorp.ui.map.MapViewFragment
+import com.despaircorp.ui.restaurants.RestaurantsFragment
 import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.workmates.WorkmatesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BottomNavigationActivity : AppCompatActivity() {
     private val binding by viewBinding { BottomNavigationActivityBinding.inflate(it) }
-    private val viewModel: BottomBarViewModel by viewModels()
+    private val viewModel: BottomNavigationViewModel by viewModels()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +46,19 @@ class BottomNavigationActivity : AppCompatActivity() {
         binding.bottomNavigationActBottomBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-               //     loadFragment(MapViewFragment())
+                    loadFragment(MapViewFragment())
                     true
                 }
                 R.id.navigation_dashboard -> {
-                //    loadFragment(RestaurantsFragment())
+                    loadFragment(RestaurantsFragment())
                     true
                 }
                 R.id.navigation_notifications -> {
-                //    loadFragment(WorkmatesFragment())
+                    loadFragment(WorkmatesFragment())
                     true
                 }
                 else -> {
-                //    loadFragment(MapViewFragment())
+                    loadFragment(MapViewFragment())
                     true
                 }
             }
@@ -63,6 +68,22 @@ class BottomNavigationActivity : AppCompatActivity() {
             HeaderNavigationDrawerBinding.bind(
                 binding.bottomNavigationActNavigationViewProfile.getHeaderView(0)
             )
+        
+        viewModel.viewState.observe(this) { viewState ->
+            Glide.with(headerBinding.navigationDrawerImageViewUserImage)
+                .load(viewState.userProfilePictureUrl)
+                .into(headerBinding.navigationDrawerImageViewUserImage)
+    
+            headerBinding.navigationDrawerTextViewUserName.text = viewState.userName
+            headerBinding.navigationDrawerTextViewUserMail.text = viewState.userEmailAddress
+        }
+    }
+    
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(binding.bottomNavigationActFrameLayout.id, fragment)
+            .commit()
     }
     
     companion object {
