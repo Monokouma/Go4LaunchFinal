@@ -1,21 +1,20 @@
 package com.despaircorp.data.authentication
 
 import com.despaircorp.domain.authentication.AuthenticationRepository
-import com.despaircorp.domain.authentication.model.UserEntity
+import com.despaircorp.domain.authentication.model.AuthenticatedUser
+import com.despaircorp.domain.user.model.UserEntity
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
 class AuthenticationRepositoryFirebase @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
 ) : AuthenticationRepository {
-    override suspend fun getUser(): UserEntity? = firebaseAuth.currentUser?.let {
-        UserEntity(
+    override suspend fun getUser(): AuthenticatedUser? = firebaseAuth.currentUser?.let {
+        AuthenticatedUser(
             it.uid,
             it.displayName ?: return null,
             it.email ?: return null,
             it.photoUrl?.toString(),
         )
     }
-    
- 
 }

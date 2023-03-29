@@ -1,20 +1,21 @@
 package com.despaircorp.domain.user
 
 import com.despaircorp.domain.authentication.AuthenticationRepository
-import com.despaircorp.domain.authentication.model.UserEntity
+import com.despaircorp.domain.user.model.UserEntity
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class GetUserUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val authenticationRepository: AuthenticationRepository
 ) {
-    suspend fun invoke(): UserEntity? {
-        val user = authenticationRepository.getUser()
-        return if (user != null) {
-            userRepository.getUser(user.id)
+    fun invoke(): Flow<UserEntity?> = authenticationRepository.getUserFlow().transformLatest { authenticatedUser ->
+        if (authenticatedUser == null) {
+            emit(null)
         } else {
-            null
+            userRepository.getUser(authenticatedUser.id).collect {
+                emit(it)
+            }
         }
-        
     }
 }

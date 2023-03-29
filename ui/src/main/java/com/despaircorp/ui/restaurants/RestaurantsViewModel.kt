@@ -1,8 +1,5 @@
 package com.despaircorp.ui.restaurants
 
-import android.location.Location
-import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.location.GetUserLocationUseCase
@@ -13,9 +10,11 @@ import javax.inject.Inject
 @HiltViewModel
 class RestaurantsViewModel @Inject constructor(
     private val getUserLocationUseCase: GetUserLocationUseCase
-): ViewModel(){
-    
-    val view = liveData<Location>(Dispatchers.IO) {
-        emit(getUserLocationUseCase.invoke())
+) : ViewModel() {
+
+    val view = liveData(Dispatchers.IO) {
+        getUserLocationUseCase.invoke().collect {
+            emit(it)
+        }
     }
 }

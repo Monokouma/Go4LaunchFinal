@@ -1,6 +1,6 @@
 package com.despaircorp.domain.authentication.model
 
-data class UserEntity(
+data class AuthenticatedUser(
     val id: String,
     val name: String,
     val email: String,

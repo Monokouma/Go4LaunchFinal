@@ -8,7 +8,7 @@ class SaveCurrentUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend fun invoke(): Boolean {
-        val user = authenticationRepository.getUser()
+        val user = authenticationRepository.getUserFlow()
 
         return if (user != null) {
             userRepository.saveUser(user)
