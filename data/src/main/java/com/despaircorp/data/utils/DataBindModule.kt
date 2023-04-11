@@ -23,7 +23,7 @@ abstract class DataBindModule {
     
     @Binds
     @Singleton
-    abstract fun bindAuthenthicationRepository(impl: AuthenticationRepositoryFirebase): AuthenticationRepository
+    abstract fun bindAuthenticationRepository(impl: AuthenticationRepositoryFirebase): AuthenticationRepository
     
     @Binds
     @Singleton

@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.BottomNavigationActivityBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
-import com.despaircorp.ui.map.MapViewFragment
+import com.despaircorp.ui.map.MapFragment
 import com.despaircorp.ui.restaurants.RestaurantsFragment
 import com.despaircorp.ui.utils.viewBinding
 import com.despaircorp.ui.workmates.WorkmatesFragment
@@ -46,7 +46,7 @@ class BottomNavigationActivity : AppCompatActivity() {
         binding.bottomNavigationActBottomBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    loadFragment(MapViewFragment())
+                    loadFragment(MapFragment())
                     true
                 }
                 R.id.navigation_dashboard -> {
@@ -58,7 +58,7 @@ class BottomNavigationActivity : AppCompatActivity() {
                     true
                 }
                 else -> {
-                    loadFragment(MapViewFragment())
+                    loadFragment(MapFragment())
                     true
                 }
             }

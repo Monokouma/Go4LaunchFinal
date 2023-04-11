@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthenticationRepository {
     fun getUserFlow(): Flow<AuthenticatedUser?>
+    fun getUser(): AuthenticatedUser?
 }
