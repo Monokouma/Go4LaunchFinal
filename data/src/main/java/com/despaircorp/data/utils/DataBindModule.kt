@@ -2,11 +2,11 @@ package com.despaircorp.data.utils
 
 import com.despaircorp.data.LocationProviderRepository
 import com.despaircorp.data.authentication.AuthenticationRepositoryFirebase
-import com.despaircorp.data.restaurants.RestaurantsRepository
+import com.despaircorp.data.restaurants.RestaurantsRepositoryRetrofit
 import com.despaircorp.data.user.UserRepositoryFirestore
 import com.despaircorp.domain.authentication.AuthenticationRepository
 import com.despaircorp.domain.location.LocationRepository
-import com.despaircorp.domain.restaurants.NearbyRestaurantsRepository
+import com.despaircorp.domain.restaurants.RestaurantsRepository
 import com.despaircorp.domain.user.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -33,5 +33,5 @@ abstract class DataBindModule {
     
     @Binds
     @Singleton
-    abstract fun bindRestaurantsRepository(impl: RestaurantsRepository): NearbyRestaurantsRepository
+    abstract fun bindRestaurantsRepository(impl: RestaurantsRepositoryRetrofit): RestaurantsRepository
 }

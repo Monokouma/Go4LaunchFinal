@@ -7,9 +7,11 @@ import android.util.Log
 import com.despaircorp.domain.location.LocationRepository
 import com.google.android.gms.location.*
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class LocationProviderRepository @Inject constructor(
@@ -36,6 +38,5 @@ class LocationProviderRepository @Inject constructor(
         )
     
         awaitClose { fusedLocationProviderClient.removeLocationUpdates(locationCallback) }
-    }
-    
+    }.flowOn(Dispatchers.IO)
 }

@@ -11,7 +11,7 @@ data class RestaurantsDto(
 	val htmlAttributions: List<Any?>? = null,
 
 	@field:SerializedName("results")
-	val results: List<ResultsItem?>? = null,
+	val results: List<ResultsItem>,
 
 	@field:SerializedName("status")
 	val status: String? = null

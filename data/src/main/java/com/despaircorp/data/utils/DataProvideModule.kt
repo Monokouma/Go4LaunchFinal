@@ -2,7 +2,7 @@ package com.despaircorp.data.utils
 
 import android.app.Application
 import android.content.res.Resources
-import com.despaircorp.data.retrofit.GooglePlaceApi
+import com.despaircorp.data.retrofit.GooglePlacesApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
@@ -45,8 +45,8 @@ class DataProvideModule {
     
     @Provides
     @Singleton
-    fun provideGooglePlaceApi(retrofit: Retrofit): GooglePlaceApi {
-        return retrofit.create(GooglePlaceApi::class.java)
+    fun provideGooglePlaceApi(retrofit: Retrofit): GooglePlacesApi {
+        return retrofit.create(GooglePlacesApi::class.java)
     }
     
     @Provides
