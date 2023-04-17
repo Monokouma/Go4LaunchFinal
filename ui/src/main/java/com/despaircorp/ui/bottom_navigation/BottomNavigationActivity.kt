@@ -1,11 +1,15 @@
 package com.despaircorp.ui.bottom_navigation
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
@@ -26,7 +30,7 @@ class BottomNavigationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.bottomNavigationActToolbar)
-
+        getLocationPermission()
         binding.bottomNavigationActToolbar.setNavigationOnClickListener {
             binding.bottomNavigationActAppbarDrawerLayout.open()
         }
@@ -83,6 +87,20 @@ class BottomNavigationActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(binding.bottomNavigationActFrameLayout.id, fragment)
             .commit()
+    }
+    
+    private fun getLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0)
+            return
+        }
     }
 
     companion object {

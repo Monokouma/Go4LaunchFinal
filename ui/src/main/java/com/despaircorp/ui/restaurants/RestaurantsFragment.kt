@@ -20,10 +20,8 @@ class RestaurantsFragment : Fragment(R.layout.restaurants_fragment), Restaurants
 
         val restaurantAdapter = RestaurantsAdapter(this)
         binding.restaurantListFragRecyclerView.adapter = restaurantAdapter
-
-        viewModel.view.observe(viewLifecycleOwner) {
-            Log.i("Monokouma", it.longitude.toString())
-            Log.i("Monokouma", it.latitude.toString())
+        viewModel.viewState.observe(viewLifecycleOwner) {
+            Log.i("Monokouma", it.toString())
         }
     }
 
