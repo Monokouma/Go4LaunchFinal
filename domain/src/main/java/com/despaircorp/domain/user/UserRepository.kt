@@ -1,9 +1,10 @@
 package com.despaircorp.domain.user
 
-import com.despaircorp.domain.authentication.model.UserEntity
+import com.despaircorp.domain.user.model.UserEntity
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun saveUser(userEntity: UserEntity): Boolean
     
-    suspend fun getUser(uuid: String): UserEntity?
+    fun getUser(uuid: String): Flow<UserEntity?>
 }

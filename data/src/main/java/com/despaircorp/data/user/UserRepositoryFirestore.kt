@@ -1,13 +1,14 @@
 package com.despaircorp.data.user
 
-import com.despaircorp.domain.authentication.model.UserEntity
 import com.despaircorp.domain.user.UserRepository
+import com.despaircorp.domain.user.model.UserEntity
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.Executor
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
@@ -35,27 +36,32 @@ class UserRepositoryFirestore @Inject constructor(
             false
         }
     }
-    
-    override suspend fun getUser(uuid: String): UserEntity? {
-        val documentSnapshot = firestore.collection("users")
+
+    override fun getUser(uuid: String): Flow<UserEntity?> = callbackFlow {
+        val registration = firestore.collection("users")
             .document(uuid)
-            .get()
-            .await()
-    
-        val userDto = documentSnapshot.toObject<UserDto>()
-        
-        return try {
-            UserEntity(
-                id = userDto?.uuid ?: return null,
-                name = userDto.name ?: return null,
-                email = userDto.emailAddress ?: return null,
-                photoUrl = userDto.picture,
-            )
-        } catch (e: Exception) {
-            coroutineContext.ensureActive()
-            null
-        }
-        
+            .addSnapshotListener { documentSnapshot, exception ->
+                if (documentSnapshot != null) {
+                    try {
+                        val userDto = documentSnapshot.toObject<UserDto>()
+
+                        trySend(
+                            UserEntity(
+                                id = userDto?.uuid ?: return@addSnapshotListener,
+                                name = userDto.name ?: return@addSnapshotListener,
+                                email = userDto.emailAddress ?: return@addSnapshotListener,
+                                photoUrl = userDto.picture,
+                            )
+                        )
+                    } catch (e: Exception) {
+                        coroutineContext.ensureActive()
+                        e.printStackTrace()
+                    }
+                }
+
+                exception?.printStackTrace()
+            }
+
+        awaitClose { registration.remove() }
     }
-    
 }

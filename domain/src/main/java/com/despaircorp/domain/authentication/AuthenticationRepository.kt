@@ -1,8 +1,9 @@
 package com.despaircorp.domain.authentication
 
-import com.despaircorp.domain.authentication.model.UserEntity
+import com.despaircorp.domain.authentication.model.AuthenticatedUser
+import kotlinx.coroutines.flow.Flow
 
 interface AuthenticationRepository {
-    suspend fun getUser(): UserEntity?
-    
+    fun getUserFlow(): Flow<AuthenticatedUser?>
+    fun getUser(): AuthenticatedUser?
 }

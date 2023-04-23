@@ -1,0 +1,15 @@
+package com.despaircorp.domain.location
+
+import android.location.Location
+import kotlinx.coroutines.flow.Flow
+
+interface LocationRepository {
+    fun getUserCurrentLocationFlow(): Flow<Location>
+    
+
+    fun getDistanceBetweenPlaceAndUser(
+        restaurantLat: Double,
+        restaurantLong: Double,
+        userLocation: Location
+    ): Int
+}
