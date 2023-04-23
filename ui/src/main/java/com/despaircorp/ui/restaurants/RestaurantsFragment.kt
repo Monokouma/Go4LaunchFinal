@@ -3,6 +3,7 @@ package com.despaircorp.ui.restaurants
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.despaircorp.ui.R
@@ -21,7 +22,8 @@ class RestaurantsFragment : Fragment(R.layout.restaurants_fragment), Restaurants
         val restaurantAdapter = RestaurantsAdapter(this)
         binding.restaurantListFragRecyclerView.adapter = restaurantAdapter
         viewModel.viewState.observe(viewLifecycleOwner) {
-            Log.i("Monokouma", it.toString())
+            restaurantAdapter.submitList(it.restaurants)
+            binding.restaurantListFragProgressIndicator.isVisible = it.isSpinnerVisible
         }
     }
 

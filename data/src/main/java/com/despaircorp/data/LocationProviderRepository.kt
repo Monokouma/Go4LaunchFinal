@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Looper
 import android.util.Log
+import com.despaircorp.data.restaurants.Geometry
+import com.despaircorp.data.restaurants.RestaurantsDto
 import com.despaircorp.domain.location.LocationRepository
 import com.google.android.gms.location.*
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
@@ -28,7 +30,7 @@ class LocationProviderRepository @Inject constructor(
             }
         }
     
-        val locationRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, 10_000L)
+        val locationRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, 60_000L)
             .build()
     
         fusedLocationProviderClient.requestLocationUpdates(
@@ -39,4 +41,15 @@ class LocationProviderRepository @Inject constructor(
     
         awaitClose { fusedLocationProviderClient.removeLocationUpdates(locationCallback) }
     }.flowOn(Dispatchers.IO)
+    
+    override fun getDistanceBetweenPlaceAndUser(
+        restaurantLat: Double,
+        restaurantLong: Double,
+        userLocation: Location
+    ): Int {
+        val placeLocation = Location("placeLocation")
+        placeLocation.longitude = restaurantLong
+        placeLocation.latitude = restaurantLat
+        return userLocation.distanceTo(placeLocation).toInt()
+    }
 }
