@@ -40,7 +40,7 @@ class LocationProviderRepository @Inject constructor(
         )
     
         awaitClose { fusedLocationProviderClient.removeLocationUpdates(locationCallback) }
-    }.flowOn(Dispatchers.IO)
+    }
     
     override fun getDistanceBetweenPlaceAndUser(
         restaurantLat: Double,

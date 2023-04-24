@@ -8,6 +8,7 @@ import com.despaircorp.domain.location.GetDistanceBetweenUserAndPlaces
 import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.ui.R
+import com.despaircorp.ui.utils.CoroutineDispatcherProvider
 import com.despaircorp.ui.utils.NativeText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -18,10 +19,12 @@ import javax.inject.Inject
 class RestaurantsViewModel @Inject constructor(
     private val getNearbyRestaurantsWithUserLocationUseCase: GetNearbyRestaurantsWithUserLocationUseCase,
     private val getUserLocationUseCase: GetUserLocationUseCase,
-    private val getDistanceBetweenUserAndPlaces: GetDistanceBetweenUserAndPlaces
-) : ViewModel() {
+    private val getDistanceBetweenUserAndPlaces: GetDistanceBetweenUserAndPlaces,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
+    
+    ) : ViewModel() {
 
-    val viewState: LiveData<RestaurantsViewState> = liveData {
+    val viewState: LiveData<RestaurantsViewState> = liveData(coroutineDispatcherProvider.io) {
         if (latestValue == null) {
             emit(
                 RestaurantsViewState(

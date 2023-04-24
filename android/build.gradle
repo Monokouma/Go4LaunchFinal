@@ -51,7 +51,9 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.44.2"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core-ktx:+'
     kapt "com.google.dagger:hilt-compiler:2.44.2"
+
 }
 kapt {
     correctErrorTypes true
