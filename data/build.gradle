@@ -30,15 +30,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = "11"
+        freeCompilerArgs += [
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        ]
     }
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:+'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     implementation project(path: ':domain')
 
@@ -59,13 +61,10 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.44.2"
     kapt "com.google.dagger:hilt-compiler:2.44.2"
-    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.mockk:mockk:1.13.5'
-    testImplementation 'io.kotest:kotest-assertions-core:5.5.5'
+    testImplementation 'io.mockk:mockk:1.13.3'
+    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    implementation 'com.google.android.libraries.places:places:3.1.0'
-
 }

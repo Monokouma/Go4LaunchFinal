@@ -3,9 +3,6 @@ package com.despaircorp.data
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Looper
-import android.util.Log
-import com.despaircorp.data.restaurants.Geometry
-import com.despaircorp.data.restaurants.RestaurantsDto
 import com.despaircorp.domain.location.LocationRepository
 import com.google.android.gms.location.*
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
@@ -13,13 +10,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LocationProviderRepository @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-): LocationRepository {
-    
+) : LocationRepository {
+
     @SuppressLint("MissingPermission")
     override fun getUserCurrentLocationFlow(): Flow<Location> = callbackFlow {
         val locationCallback: LocationCallback = object : LocationCallback() {
@@ -29,27 +26,33 @@ class LocationProviderRepository @Inject constructor(
                 }
             }
         }
-    
+
         val locationRequest = LocationRequest.Builder(PRIORITY_HIGH_ACCURACY, 60_000L)
             .build()
-    
+
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
             Looper.getMainLooper()
         )
-    
+
         awaitClose { fusedLocationProviderClient.removeLocationUpdates(locationCallback) }
     }
-    
-    override fun getDistanceBetweenPlaceAndUser(
+
+    override suspend fun getDistanceBetweenPlaceAndUser(
+        userLat: Double,
+        userLong: Double,
         restaurantLat: Double,
         restaurantLong: Double,
-        userLocation: Location
-    ): Int {
-        val placeLocation = Location("placeLocation")
-        placeLocation.longitude = restaurantLong
-        placeLocation.latitude = restaurantLat
-        return userLocation.distanceTo(placeLocation).toInt()
+    ): Int = withContext(Dispatchers.Default) {
+        val result = FloatArray(1)
+        Location.distanceBetween(
+            userLat,
+            userLong,
+            restaurantLat,
+            restaurantLong,
+            result
+        )
+        result.first().toInt()
     }
 }
