@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id "org.jetbrains.kotlinx.kover"
     id 'com.google.gms.google-services'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -31,21 +32,22 @@ android {
         viewBinding true
     }
 
-
-
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = "11"
+        freeCompilerArgs += [
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+        ]
     }
 }
 
 dependencies {
-
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 
     implementation project(path: ':domain')
 
@@ -54,9 +56,6 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-
-    // Provides lifecycle and coroutines scopes
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
 
     // Kotlin
     implementation "androidx.core:core-ktx:1.10.0"
@@ -79,15 +78,15 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.44.2"
     kapt "com.google.dagger:hilt-compiler:2.44.2"
 
-
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.kotest:kotest-assertions-core:5.5.5'
     testImplementation("androidx.arch.core:core-testing:2.2.0") {
         // Removes the Mockito dependency bundled with arch core (wtf android ??)
         exclude group: "org.mockito", module: "mockito-core"
     }
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    testImplementation "io.mockk:mockk:1.13.5"
+    testImplementation "io.mockk:mockk:1.13.3"
+    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
+    androidTestImplementation "android.arch.core:core-testing:1.1.0"
 
 }
 

@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocationRepository {
     fun getUserCurrentLocationFlow(): Flow<Location>
-    
 
-    fun getDistanceBetweenPlaceAndUser(
+    suspend fun getDistanceBetweenPlaceAndUser(
+        userLat: Double,
+        userLong: Double,
         restaurantLat: Double,
         restaurantLong: Double,
-        userLocation: Location
     ): Int
 }
