@@ -19,7 +19,7 @@ class RestaurantsRepositoryRetrofit @Inject constructor(
             apiKey = "AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM",
             type = "restaurant"
         )
-
+        Log.i("Monokouma", restaurantsDto.results.toString())
         return restaurantsDto.results.mapNotNull { result ->
             Log.i("Monokouma", result.photos.toString())
             RestaurantEntity(

@@ -1,5 +1,6 @@
 package com.despaircorp.ui.restaurants
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -36,7 +37,7 @@ class RestaurantsViewModel @Inject constructor(
             getNearbyRestaurantsWithUserLocationUseCase.invoke(),
             getUserLocationUseCase.invoke()
         ) { nearbyRestaurants, userLocation ->
-
+            
             emit(
                 RestaurantsViewState(
                     restaurants = nearbyRestaurants.map { nearbyRestaurant ->

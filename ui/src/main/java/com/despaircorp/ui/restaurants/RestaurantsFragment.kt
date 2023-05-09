@@ -23,6 +23,7 @@ class RestaurantsFragment : Fragment(R.layout.restaurants_fragment), Restaurants
         binding.restaurantListFragRecyclerView.adapter = restaurantAdapter
         viewModel.viewState.observe(viewLifecycleOwner) {
             restaurantAdapter.submitList(it.restaurants)
+            Log.i("Monokouma", it.restaurants.toString())
             binding.restaurantListFragProgressIndicator.isVisible = it.isSpinnerVisible
         }
     }
