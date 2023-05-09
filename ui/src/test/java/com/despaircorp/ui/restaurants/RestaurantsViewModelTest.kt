@@ -1,5 +1,6 @@
 package com.despaircorp.ui.restaurants
 
+
 import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import assertk.assertThat
