@@ -1,7 +1,5 @@
 package com.despaircorp.domain.restaurants.model
 
-import android.location.Location
-
 
 data class RestaurantEntity(
     val id: String,

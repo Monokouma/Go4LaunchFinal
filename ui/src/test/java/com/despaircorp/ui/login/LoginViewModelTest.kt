@@ -8,6 +8,7 @@ import com.despaircorp.ui.utils.TestCoroutineRule
 import com.despaircorp.ui.utils.observeForTesting
 import io.mockk.coEvery
 import io.mockk.mockk
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -26,11 +27,18 @@ class LoginViewModelTest {
         saveCurrentUserUseCase,
         testCoroutineRule.getTestCoroutineDispatcherProvider()
     )
-    
+
+    @Before
+    fun setUp() {
+        coEvery { saveCurrentUserUseCase.invoke() } returns true
+    }
+
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
-        coEvery { saveCurrentUserUseCase.invoke() } returns true
+        // When
         viewModel.onUserConnected()
+
+        // Then
         viewModel.loginViewActionLiveData.observeForTesting(this) {
             assertThat(it.value?.getContentIfNotHandled()).isEqualTo(LoginAction.GoToMainActivity)
         }
@@ -38,8 +46,13 @@ class LoginViewModelTest {
     
     @Test
     fun `auth case fail`() = testCoroutineRule.runTest {
+        // Given
         coEvery { saveCurrentUserUseCase.invoke() } returns false
+
+        // When
         viewModel.onUserConnected()
+
+        // Then
         viewModel.loginViewActionLiveData.observeForTesting(this) {
             assertThat(it.value?.getContentIfNotHandled()).isEqualTo(LoginAction.ErrorMessage)
         }

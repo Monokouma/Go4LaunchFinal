@@ -12,26 +12,21 @@ import javax.inject.Inject
 @HiltViewModel
 class MapViewModel @Inject constructor(
     private val getNearbyRestaurantsWithUserLocationUseCase: GetNearbyRestaurantsWithUserLocationUseCase,
-    private val testCoroutineDispatcherProvider: CoroutineDispatcherProvider,
+    testCoroutineDispatcherProvider: CoroutineDispatcherProvider,
 ) : ViewModel() {
 
     val viewStateLiveData: LiveData<MapViewState> = liveData(testCoroutineDispatcherProvider.io) {
-        val mapViewStateItem = mutableListOf<MapViewStateItem>()
-        
         getNearbyRestaurantsWithUserLocationUseCase.invoke().collect { restaurants ->
-            restaurants.forEach {
-                mapViewStateItem.add(
-                    MapViewStateItem(
-                        placeId = it.id,
-                        name = it.name,
-                        latitude = it.latitude,
-                        longitude = it.longitude
-                    )
-                )
-            }
             emit(
                 MapViewState(
-                    mapViewStateItems = mapViewStateItem
+                    mapViewStateItems = restaurants.map {
+                        MapViewStateItem(
+                            placeId = it.id,
+                            name = it.name,
+                            latitude = it.latitude,
+                            longitude = it.longitude
+                        )
+                    }
                 )
             )
         }

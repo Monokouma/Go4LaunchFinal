@@ -3,8 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-    id "org.jetbrains.kotlinx.kover"
     id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlinx.kover"
 }
 
 android {
@@ -51,4 +51,10 @@ dependencies {
     testImplementation 'io.mockk:mockk:1.13.3'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
 
+}
+
+kover {
+    instrumentation {
+        excludeTasks.add "testReleaseUnitTest"
+    }
 }

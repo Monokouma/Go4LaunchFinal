@@ -88,7 +88,12 @@ class RestaurantsViewModelTest {
         // When
         viewModel.viewState.observeForTesting(this) {
             // Then
-            assertThat(it.value).isEqualTo(RestaurantsViewState(emptyList(), true))
+            assertThat(it.value).isEqualTo(
+                RestaurantsViewState(
+                    restaurants = emptyList(),
+                    isSpinnerVisible = true
+                )
+            )
         }
     }
 

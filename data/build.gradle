@@ -3,8 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-    id "org.jetbrains.kotlinx.kover"
     id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlinx.kover"
 }
 
 android {
@@ -67,4 +67,10 @@ dependencies {
     testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+}
+
+kover {
+    instrumentation {
+        excludeTasks.add "testReleaseUnitTest"
+    }
 }

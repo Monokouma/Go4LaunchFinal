@@ -3,15 +3,15 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-
+    id "org.jetbrains.kotlinx.kover"
 }
 
 android {
-    namespace 'com.despairCorp.myapplication'
+    namespace 'com.despaircorp.myapplication'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.despairCorp.myapplication"
+        applicationId "com.despaircorp.myapplication"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -53,8 +53,14 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.44.2"
     kapt "com.google.dagger:hilt-compiler:2.44.2"
-
 }
+
+kover {
+    instrumentation {
+        excludeTasks.add "testReleaseUnitTest"
+    }
+}
+
 kapt {
     correctErrorTypes true
 }

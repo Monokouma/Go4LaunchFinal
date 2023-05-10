@@ -3,9 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-    id "org.jetbrains.kotlinx.kover"
     id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlinx.kover"
 }
 
 android {
@@ -88,6 +88,12 @@ dependencies {
     testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
     androidTestImplementation "android.arch.core:core-testing:1.1.0"
 
+}
+
+kover {
+    instrumentation {
+        excludeTasks.add "testReleaseUnitTest"
+    }
 }
 
 kapt {

@@ -16,8 +16,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val saveCurrentUserUseCase: SaveCurrentUserUseCase,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
-    
-    ) : ViewModel() {
+) : ViewModel() {
 
     val loginViewActionLiveData = MutableLiveData<Event<LoginAction>>()
 
