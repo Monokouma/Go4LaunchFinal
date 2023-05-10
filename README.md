@@ -1,0 +1,1 @@
+To execute koverage, use `./gradlew koverMergedHtmlReport` (or, for short, `./gradlew kMHR`)
