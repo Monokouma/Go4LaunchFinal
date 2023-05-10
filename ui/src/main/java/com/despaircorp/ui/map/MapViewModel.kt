@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
+import com.despaircorp.ui.utils.CoroutineDispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
@@ -11,9 +12,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MapViewModel @Inject constructor(
     private val getNearbyRestaurantsWithUserLocationUseCase: GetNearbyRestaurantsWithUserLocationUseCase,
+    private val testCoroutineDispatcherProvider: CoroutineDispatcherProvider,
 ) : ViewModel() {
 
-    val viewStateLiveData: LiveData<MapViewState> = liveData(Dispatchers.IO) {
+    val viewStateLiveData: LiveData<MapViewState> = liveData(testCoroutineDispatcherProvider.io) {
         val mapViewStateItem = mutableListOf<MapViewStateItem>()
         
         getNearbyRestaurantsWithUserLocationUseCase.invoke().collect { restaurants ->
