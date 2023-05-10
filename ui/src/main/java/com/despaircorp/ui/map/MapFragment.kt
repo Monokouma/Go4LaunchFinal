@@ -3,6 +3,7 @@ package com.despaircorp.ui.map
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
@@ -18,7 +19,7 @@ class MapFragment : SupportMapFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+    
         getMapAsync { googleMap ->
             mapViewViewModel.viewStateLiveData.observe(viewLifecycleOwner) {
                 it.mapViewStateItems.forEach {item ->
