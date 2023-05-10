@@ -1,4 +1,4 @@
-package com.despairCorp.myapplication
+package com.despaircorp.myapplication
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
