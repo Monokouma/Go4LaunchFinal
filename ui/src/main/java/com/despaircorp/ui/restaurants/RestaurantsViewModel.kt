@@ -41,8 +41,7 @@ class RestaurantsViewModel @Inject constructor(
                 RestaurantsViewState(
                     restaurants = nearbyRestaurants.map { nearbyRestaurant ->
                         val distance = getDistanceBetweenUserAndPlacesUseCase.invoke(
-                            userLat = userLocation.latitude,
-                            userLong = userLocation.longitude,
+                            userLocation = userLocation,
                             restaurantLat = nearbyRestaurant.latitude,
                             restaurantLong = nearbyRestaurant.longitude,
                         )

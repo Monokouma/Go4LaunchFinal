@@ -1,18 +1,17 @@
 package com.despaircorp.data.restaurants
 
-import android.location.Location
 import android.util.Log
 import com.despaircorp.data.retrofit.GooglePlacesApi
+import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.restaurants.RestaurantsRepository
 import com.despaircorp.domain.restaurants.model.RestaurantEntity
-import java.lang.Double
 import javax.inject.Inject
 
 class RestaurantsRepositoryRetrofit @Inject constructor(
     private val placesApi: GooglePlacesApi,
 ) : RestaurantsRepository {
 
-    override suspend fun getNearbyRestaurantsList(location: Location): List<RestaurantEntity> {
+    override suspend fun getNearbyRestaurantsList(location: LocationEntity): List<RestaurantEntity> {
         val restaurantsDto = placesApi.getPlaces(
             location = "${location.latitude}, ${location.longitude}",
             radius = 1_000,
