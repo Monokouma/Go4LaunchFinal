@@ -9,6 +9,8 @@ import com.despaircorp.domain.location.GetDistanceBetweenUserAndPlacesUseCase
 import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.ui.R
+import com.despaircorp.ui.utils.NativeText
 import com.despaircorp.ui.utils.TestCoroutineRule
 import com.despaircorp.ui.utils.observeForTesting
 import io.mockk.coEvery
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.StringBuilder
 
 class RestaurantsViewModelTest {
 
@@ -52,7 +55,7 @@ class RestaurantsViewModelTest {
 
     @Before
     fun setup() {
-        every { getNearbyRestaurantsWithUserLocationUseCase.invoke() } returns flowOf(getDefaultRestaurantEntities())
+        every { getNearbyRestaurantsWithUserLocationUseCase.invoke() } returns flowOf(getDefaultOpenedRestaurantEntities())
         every { getUserLocationUseCase.invoke() } returns flowOf(getDefaultLocationEntity())
         coEvery {
             getDistanceBetweenUserAndPlacesUseCase.invoke(
@@ -96,9 +99,30 @@ class RestaurantsViewModelTest {
             )
         }
     }
-
+    
+    @Test
+    fun `restaurants is opened`() = testCoroutineRule.runTest {
+        viewModel.viewState.observeForTesting(this) {
+            // Then
+            assertThat(it.value?.restaurants).isEqualTo(
+                getDefaultOpenedRestaurantViewStateItems()
+            )
+        }
+    }
+    
+    @Test
+    fun `restaurants is closed`() = testCoroutineRule.runTest {
+        every { getNearbyRestaurantsWithUserLocationUseCase.invoke() } returns flowOf(getDefaultClosedRestaurantEntities())
+        viewModel.viewState.observeForTesting(this) {
+            // Then
+            assertThat(it.value?.restaurants).isEqualTo(
+                getDefaultClosedRestaurantViewStateItems()
+            )
+        }
+    }
+    
     // region IN
-    private fun getDefaultRestaurantEntities(): List<RestaurantEntity> = List(3) { index ->
+    private fun getDefaultClosedRestaurantEntities(): List<RestaurantEntity> = List(3) { index ->
         RestaurantEntity(
             id = "$DEFAULT_ID$index",
             name = "$DEFAULT_NAME$index",
@@ -106,6 +130,20 @@ class RestaurantsViewModelTest {
             latitude = DEFAULT_LATITUDE,
             longitude = DEFAULT_LONGITUDE,
             isOpennedNow = false,
+            workmateInside = index.takeIf { it != 0 },
+            vicinity = "$DEFAULT_VICINITY$index",
+            rating = (3.0 + index).coerceAtMost(5.0),
+        )
+    }
+    
+    private fun getDefaultOpenedRestaurantEntities(): List<RestaurantEntity> = List(3) { index ->
+        RestaurantEntity(
+            id = "$DEFAULT_ID$index",
+            name = "$DEFAULT_NAME$index",
+            photoUrl = "$DEFAULT_PHOTO_URL$index",
+            latitude = DEFAULT_LATITUDE,
+            longitude = DEFAULT_LONGITUDE,
+            isOpennedNow = true,
             workmateInside = index.takeIf { it != 0 },
             vicinity = "$DEFAULT_VICINITY$index",
             rating = (3.0 + index).coerceAtMost(5.0),
@@ -119,5 +157,60 @@ class RestaurantsViewModelTest {
     // endregion IN
 
     // region OUT
+    private fun getDefaultClosedRestaurantViewStateItems(): List<RestaurantsViewStateItems> {
+        val restaurants = mutableListOf<RestaurantsViewStateItems>()
+    
+        getDefaultClosedRestaurantEntities().forEach {
+            val photoUrl = StringBuilder()
+                .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
+                .append(it.photoUrl)
+                .append("&key=AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM")
+                .toString()
+        
+            restaurants.add(
+                RestaurantsViewStateItems(
+                    restaurantName = it.name,
+                    restaurantDistance = "0m",
+                    restaurantImageUrl = photoUrl,
+                    restaurantAddressAndType = it.vicinity,
+                    workmatesInside = it.workmateInside.toString(),
+                    restaurantSchedule = NativeText.Resource(R.string.closed),
+                    restaurantStar = it.rating,
+                    openedTextColorRes = R.color.rusty_red,
+                    placeId = it.id
+                )
+            )
+        }
+    
+        return restaurants
+    }
+    
+    private fun getDefaultOpenedRestaurantViewStateItems(): List<RestaurantsViewStateItems> {
+        val restaurants = mutableListOf<RestaurantsViewStateItems>()
+        
+        getDefaultOpenedRestaurantEntities().forEach {
+            val photoUrl = StringBuilder()
+                .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
+                .append(it.photoUrl)
+                .append("&key=AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM")
+                .toString()
+            
+            restaurants.add(
+                RestaurantsViewStateItems(
+                    restaurantName = it.name,
+                    restaurantDistance = "0m",
+                    restaurantImageUrl = photoUrl,
+                    restaurantAddressAndType = it.vicinity,
+                    workmatesInside = it.workmateInside.toString(),
+                    restaurantSchedule = NativeText.Resource(R.string.opened),
+                    restaurantStar = it.rating,
+                    openedTextColorRes = R.color.shamrock_green,
+                    placeId = it.id
+                )
+            )
+        }
+        
+        return restaurants
+    }
     // endregion OUT
 }
