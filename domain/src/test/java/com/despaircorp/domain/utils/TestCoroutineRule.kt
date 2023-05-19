@@ -1,4 +1,4 @@
-package com.despaircorp.ui.utils
+package com.despaircorp.domain.utils
 
 import io.mockk.every
 import io.mockk.mockk

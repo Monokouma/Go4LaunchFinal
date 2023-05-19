@@ -1,4 +1,4 @@
-package com.despaircorp.ui.utils
+package com.despaircorp.domain.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

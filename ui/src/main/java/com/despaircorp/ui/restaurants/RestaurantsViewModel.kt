@@ -7,7 +7,7 @@ import com.despaircorp.domain.location.GetDistanceBetweenUserAndPlacesUseCase
 import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.ui.R
-import com.despaircorp.ui.utils.CoroutineDispatcherProvider
+import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import com.despaircorp.ui.utils.NativeText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect

@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
-import com.despaircorp.ui.utils.CoroutineDispatcherProvider
+import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 @HiltViewModel

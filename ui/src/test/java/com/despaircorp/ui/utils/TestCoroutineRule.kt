@@ -1,5 +1,6 @@
 package com.despaircorp.ui.utils
 
+import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

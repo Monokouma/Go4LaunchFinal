@@ -45,11 +45,15 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.44.2"
     kapt "com.google.dagger:hilt-compiler:2.44.2"
 
-    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
-
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.mockk:mockk:1.13.3'
+    testImplementation("androidx.arch.core:core-testing:2.2.0") {
+        // Removes the Mockito dependency bundled with arch core (wtf android ??)
+        exclude group: "org.mockito", module: "mockito-core"
+    }
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation "io.mockk:mockk:1.13.3"
+    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
+    androidTestImplementation "android.arch.core:core-testing:1.1.0"
 
 }
 
