@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".workmates.WorkmatesFragment"
+    android:background="@color/baby_powder"
     >
     
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workmate_fragment_coworker_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
+        tools:listitem="@layout/coworkers_items"
         />
 
 </FrameLayout>

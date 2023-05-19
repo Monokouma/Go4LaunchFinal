@@ -18,6 +18,7 @@ class SaveCurrentUserUseCase @Inject constructor(
                     name = user.name,
                     email = user.email,
                     photoUrl = user.photoUrl,
+                    isEating = false
                 )
             )
         } else {

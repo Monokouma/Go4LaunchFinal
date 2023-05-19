@@ -20,7 +20,8 @@ class UserRepositoryFirestore @Inject constructor(
             uuid = userEntity.id,
             name = userEntity.name,
             emailAddress = userEntity.email,
-            picture = userEntity.photoUrl
+            picture = userEntity.photoUrl,
+            isEating = false
         )
 
         return try {
@@ -51,6 +52,7 @@ class UserRepositoryFirestore @Inject constructor(
                                 name = userDto.name ?: return@addSnapshotListener,
                                 email = userDto.emailAddress ?: return@addSnapshotListener,
                                 photoUrl = userDto.picture,
+                                isEating = false
                             )
                         )
                     } catch (e: Exception) {
