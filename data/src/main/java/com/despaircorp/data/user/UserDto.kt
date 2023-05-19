@@ -5,4 +5,5 @@ data class UserDto(
     val emailAddress: String? = null,
     val uuid: String? = null,
     val picture: String? = null,
+    val isEating: Boolean? = null
 )

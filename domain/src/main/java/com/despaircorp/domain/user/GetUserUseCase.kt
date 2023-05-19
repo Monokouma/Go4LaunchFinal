@@ -19,6 +19,7 @@ class GetUserUseCase @Inject constructor(
                 name = authenticatedUser.name,
                 email = authenticatedUser.email,
                 photoUrl = authenticatedUser.photoUrl,
+                isEating = false
             )
         }
     }
