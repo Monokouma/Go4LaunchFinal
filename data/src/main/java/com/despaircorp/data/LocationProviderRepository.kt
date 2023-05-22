@@ -2,11 +2,11 @@ package com.despaircorp.data
 
 import android.annotation.SuppressLint
 import android.location.Location
+import com.despaircorp.data.utils.CoroutineDispatcherProvider
 import com.despaircorp.domain.location.LocationRepository
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.location.model.Longitude
-import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import com.google.android.gms.location.*
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import kotlinx.coroutines.Dispatchers

@@ -25,12 +25,12 @@ class RestaurantsRepositoryRetrofit @Inject constructor(
                 id = result.placeId ?: return@mapNotNull null,
                 name = result.name ?: return@mapNotNull null,
                 photoUrl = result.photos?.firstOrNull()?.photoReference,
-                latitude = result.geometry?.location?.lat as kotlin.Double,
-                longitude = result.geometry.location.lng as kotlin.Double,
+                latitude = result.geometry?.location?.lat as Double,
+                longitude = result.geometry.location.lng as Double,
                 isOpennedNow = result.openingHours?.openNow == true,
                 workmateInside = 4,
                 vicinity = result.vicinity ?: return@mapNotNull null,
-                rating = result.rating as kotlin.Double
+                rating = result.rating as Double
             )
         }
     }
