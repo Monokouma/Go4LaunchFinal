@@ -17,13 +17,10 @@ import io.mockk.mockk
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.currentTime
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import kotlin.time.Duration.Companion.milliseconds
-
 
 class GetNearbyRestaurantsWithUserLocationUseCaseTest {
     companion object {
@@ -83,7 +80,7 @@ class GetNearbyRestaurantsWithUserLocationUseCaseTest {
     }
 
     @Test
-    fun `edge case - verify mapLatest`() = testCoroutineRule.runTest {
+    fun `edge case - verify mapLatest backpressure handling`() = testCoroutineRule.runTest {
         // Given
         every { getUserLocationUseCase.invoke() } returns flow {
             emit(getDefaultLocationEntity())
@@ -97,12 +94,12 @@ class GetNearbyRestaurantsWithUserLocationUseCaseTest {
         }
 
         // When
-        getNearbyRestaurantsWithUserLocationUseCase.invoke().test(timeout = 1.milliseconds) {
-            advanceTimeBy(250)
-            runCurrent()
-
+        getNearbyRestaurantsWithUserLocationUseCase.invoke().test {
             val result = awaitItem()
+            assertThat(currentTime).isEqualTo(250)
+
             awaitComplete()
+            assertThat(currentTime).isEqualTo(250)
 
             // Then
             assertThat(result).isEqualTo(getDefaultRestaurantEntities())
