@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.user.SaveCurrentUserUseCase
-import com.despaircorp.ui.utils.CoroutineDispatcherProvider
+import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import com.despaircorp.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

@@ -1,12 +1,14 @@
 package com.despaircorp.ui.restaurants
 
 
-import android.location.Location
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.despaircorp.domain.location.GetDistanceBetweenUserAndPlacesUseCase
 import com.despaircorp.domain.location.GetUserLocationUseCase
+import com.despaircorp.domain.location.model.Latitude
+import com.despaircorp.domain.location.model.LocationEntity
+import com.despaircorp.domain.location.model.Longitude
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.domain.restaurants.model.RestaurantEntity
 import com.despaircorp.ui.R
@@ -22,7 +24,6 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.StringBuilder
 
 class RestaurantsViewModelTest {
 
@@ -59,8 +60,7 @@ class RestaurantsViewModelTest {
         every { getUserLocationUseCase.invoke() } returns flowOf(getDefaultLocationEntity())
         coEvery {
             getDistanceBetweenUserAndPlacesUseCase.invoke(
-                userLat = DEFAULT_LATITUDE,
-                userLong = DEFAULT_LONGITUDE,
+                userLocation = getDefaultLocationEntity(),
                 restaurantLat = DEFAULT_LATITUDE,
                 restaurantLong = DEFAULT_LONGITUDE
             )
@@ -99,7 +99,7 @@ class RestaurantsViewModelTest {
             )
         }
     }
-    
+
     @Test
     fun `restaurants is opened`() = testCoroutineRule.runTest {
         viewModel.viewState.observeForTesting(this) {
@@ -109,7 +109,7 @@ class RestaurantsViewModelTest {
             )
         }
     }
-    
+
     @Test
     fun `restaurants is closed`() = testCoroutineRule.runTest {
         every { getNearbyRestaurantsWithUserLocationUseCase.invoke() } returns flowOf(getDefaultClosedRestaurantEntities())
@@ -120,7 +120,7 @@ class RestaurantsViewModelTest {
             )
         }
     }
-    
+
     // region IN
     private fun getDefaultClosedRestaurantEntities(): List<RestaurantEntity> = List(3) { index ->
         RestaurantEntity(
@@ -135,7 +135,7 @@ class RestaurantsViewModelTest {
             rating = (3.0 + index).coerceAtMost(5.0),
         )
     }
-    
+
     private fun getDefaultOpenedRestaurantEntities(): List<RestaurantEntity> = List(3) { index ->
         RestaurantEntity(
             id = "$DEFAULT_ID$index",
@@ -150,23 +150,23 @@ class RestaurantsViewModelTest {
         )
     }
 
-    private fun getDefaultLocationEntity(): Location = mockk {
-        every { latitude } returns DEFAULT_LATITUDE
-        every { longitude } returns DEFAULT_LONGITUDE
-    }
+    private fun getDefaultLocationEntity() = LocationEntity(
+        latitude = Latitude(DEFAULT_LATITUDE),
+        longitude = Longitude(DEFAULT_LONGITUDE),
+    )
     // endregion IN
 
     // region OUT
     private fun getDefaultClosedRestaurantViewStateItems(): List<RestaurantsViewStateItems> {
         val restaurants = mutableListOf<RestaurantsViewStateItems>()
-    
+
         getDefaultClosedRestaurantEntities().forEach {
             val photoUrl = StringBuilder()
                 .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
                 .append(it.photoUrl)
                 .append("&key=AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM")
                 .toString()
-        
+
             restaurants.add(
                 RestaurantsViewStateItems(
                     restaurantName = it.name,
@@ -181,20 +181,20 @@ class RestaurantsViewModelTest {
                 )
             )
         }
-    
+
         return restaurants
     }
-    
+
     private fun getDefaultOpenedRestaurantViewStateItems(): List<RestaurantsViewStateItems> {
         val restaurants = mutableListOf<RestaurantsViewStateItems>()
-        
+
         getDefaultOpenedRestaurantEntities().forEach {
             val photoUrl = StringBuilder()
                 .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
                 .append(it.photoUrl)
                 .append("&key=AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM")
                 .toString()
-            
+
             restaurants.add(
                 RestaurantsViewStateItems(
                     restaurantName = it.name,
@@ -209,7 +209,7 @@ class RestaurantsViewModelTest {
                 )
             )
         }
-        
+
         return restaurants
     }
     // endregion OUT

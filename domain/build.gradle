@@ -45,12 +45,11 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.44.2"
     kapt "com.google.dagger:hilt-compiler:2.44.2"
 
-    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
-
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.mockk:mockk:1.13.3'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-
+    testImplementation 'app.cash.turbine:turbine:0.13.0'
+    testImplementation "io.mockk:mockk:1.13.3"
+    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.25'
 }
 
 kover {
