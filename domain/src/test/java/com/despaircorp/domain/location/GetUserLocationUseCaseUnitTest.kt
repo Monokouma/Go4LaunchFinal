@@ -31,7 +31,7 @@ class GetUserLocationUseCaseUnitTest {
     private val locationRepository: LocationRepository = mockk()
     
     private val getUserLocationUseCase = GetUserLocationUseCase(
-        locationRepository,
+        locationRepository = locationRepository,
     )
     
     @Before
@@ -41,7 +41,9 @@ class GetUserLocationUseCaseUnitTest {
     
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
+        //When
         getUserLocationUseCase.invoke().test {
+            //Then
             val result = awaitItem()
             awaitComplete()
             

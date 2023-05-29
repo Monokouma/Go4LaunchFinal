@@ -31,7 +31,7 @@ class GetDistanceBetweenUserAndPlacesUseCasUnitTest {
     private val locationRepository: LocationRepository = mockk()
     
     private val getDistanceBetweenUserAndPlacesUseCase = GetDistanceBetweenUserAndPlacesUseCase(
-        locationRepository,
+        locationRepository = locationRepository,
     )
     
     @Before
@@ -48,12 +48,14 @@ class GetDistanceBetweenUserAndPlacesUseCasUnitTest {
     
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
+        //When
         val result = getDistanceBetweenUserAndPlacesUseCase.invoke(
             getDefaultLocationEntity(),
             DEFAULT_RESTAURANT_LATITUDE,
             DEFAULT_RESTAURANT_LONGITUDE
         )
         
+        //Then
         assertThat(result).isEqualTo(DEFAULT_DISTANCE)
         coVerify(exactly = 1) {
             locationRepository.getDistanceBetweenPlaceAndUser(
