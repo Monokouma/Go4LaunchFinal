@@ -42,10 +42,10 @@ class RestaurantsViewModel @Inject constructor(
                     restaurants = nearbyRestaurants.map { nearbyRestaurant ->
                         val distance = getDistanceBetweenUserAndPlacesUseCase.invoke(
                             userLocation = userLocation,
-                            restaurantLat = nearbyRestaurant.latitude,
-                            restaurantLong = nearbyRestaurant.longitude,
+                            restaurantLat = nearbyRestaurant.latitude.value,
+                            restaurantLong = nearbyRestaurant.longitude.value,
                         )
-                        val isOpenNow = nearbyRestaurant.isOpennedNow
+                        val isOpenNow = nearbyRestaurant.isOpenedNow
                         val pictureUrl = StringBuilder()
                             .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
                             .append(nearbyRestaurant.photoUrl)

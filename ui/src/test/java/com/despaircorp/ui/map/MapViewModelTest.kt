@@ -3,6 +3,8 @@ package com.despaircorp.ui.map
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.despaircorp.domain.location.model.Latitude
+import com.despaircorp.domain.location.model.Longitude
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.domain.restaurants.model.RestaurantEntity
 import com.despaircorp.ui.utils.TestCoroutineRule
@@ -47,9 +49,9 @@ class MapViewModelTest {
             id = "${DEFAULT_ID}$index",
             name = "${DEFAULT_NAME}$index",
             photoUrl = "${DEFAULT_PHOTO_URL}$index",
-            latitude = DEFAULT_LATITUDE,
-            longitude = DEFAULT_LONGITUDE,
-            isOpennedNow = false,
+            latitude = Latitude(DEFAULT_LATITUDE),
+            longitude = Longitude(DEFAULT_LONGITUDE),
+            isOpenedNow = false,
             workmateInside = index.takeIf { it != 0 },
             vicinity = "${DEFAULT_VICINITY}$index",
             rating = (3.0 + index).coerceAtMost(5.0),

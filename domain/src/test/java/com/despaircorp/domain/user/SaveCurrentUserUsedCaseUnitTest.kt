@@ -41,7 +41,6 @@ class SaveCurrentUserUsedCaseUnitTest {
     @Before
     fun setup() {
         coEvery { authenticationRepository.getUser() } returns provideAuthenticatedUser()
-        coEvery { userRepository.getUser(DEFAULT_ID) } returns flowOf(provideUserEntity())
         coEvery { userRepository.saveUser(provideUserEntity()) } returns true
     }
     
@@ -78,23 +77,19 @@ class SaveCurrentUserUsedCaseUnitTest {
     }
     
     //region IN
-    private fun provideAuthenticatedUser(): AuthenticatedUser {
-        return AuthenticatedUser(
-            id = DEFAULT_ID,
-            name = DEFAULT_NAME,
-            email = DEFAULT_EMAIL,
-            photoUrl = DEFAULT_PHOTO_URL
-        )
-    }
+    private fun provideAuthenticatedUser() = AuthenticatedUser(
+        id = DEFAULT_ID,
+        name = DEFAULT_NAME,
+        email = DEFAULT_EMAIL,
+        photoUrl = DEFAULT_PHOTO_URL
+    )
     
-    private fun provideUserEntity(): UserEntity {
-        return UserEntity(
-            id = DEFAULT_ID,
-            name = DEFAULT_NAME,
-            email = DEFAULT_EMAIL,
-            photoUrl = DEFAULT_PHOTO_URL,
-            isEating = false
-        )
-    }
+    private fun provideUserEntity() = UserEntity(
+        id = DEFAULT_ID,
+        name = DEFAULT_NAME,
+        email = DEFAULT_EMAIL,
+        photoUrl = DEFAULT_PHOTO_URL,
+        isEating = false
+    )
     //end region IN
 }

@@ -22,8 +22,8 @@ class MapViewModel @Inject constructor(
                         MapViewStateItem(
                             placeId = it.id,
                             name = it.name,
-                            latitude = it.latitude,
-                            longitude = it.longitude
+                            latitude = it.latitude.value,
+                            longitude = it.longitude.value,
                         )
                     }
                 )
