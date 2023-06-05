@@ -18,6 +18,23 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    signingConfigs {
+
+        release {
+            storeFile file("keystore.jks")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+
+        debug {
+            storeFile = rootProject.file("keystore.jks")
+            storePassword = "android"
+            keyAlias = "android"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
