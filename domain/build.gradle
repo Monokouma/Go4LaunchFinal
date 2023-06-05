@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-    id 'org.jetbrains.kotlin.android'
     id "org.jetbrains.kotlinx.kover"
 }
 

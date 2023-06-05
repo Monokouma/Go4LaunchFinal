@@ -19,7 +19,7 @@ class RestaurantsRepositoryRetrofit @Inject constructor(
         val restaurantsDto = placesApi.getPlaces(
             location = "${location.latitude.value}, ${location.longitude.value}",
             radius = 1_000,
-            apiKey = "AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM",
+            apiKey = BuildConfig.MAPS_API_KEY,
             type = "restaurant"
         )
 
