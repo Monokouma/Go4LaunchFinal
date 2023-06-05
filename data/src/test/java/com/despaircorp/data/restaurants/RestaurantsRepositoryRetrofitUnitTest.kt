@@ -58,7 +58,7 @@ class RestaurantsRepositoryRetrofitUnitTest {
         val result: List<RestaurantEntity> = restaurantsRepositoryRetrofit.getNearbyRestaurantsList(
             getDefaultLocationEntity()
         )
-        assertThat(result).hasSize(1) // TODO MONO
+        assertThat(result).hasSize(1)
     }
     
     //Region OUT
