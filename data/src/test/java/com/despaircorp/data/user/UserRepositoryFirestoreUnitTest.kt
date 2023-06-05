@@ -44,6 +44,7 @@ class UserRepositoryFirestoreUnitTest {
         
     }
     
+    
     //Region out
     private fun provideUserEntity() = UserEntity(
         id = DEFAULT_ID,
