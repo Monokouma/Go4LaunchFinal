@@ -1,16 +1,14 @@
 package com.despaircorp.ui.restaurants
 
-import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.location.GetDistanceBetweenUserAndPlacesUseCase
 import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
-import com.despaircorp.ui.R
 import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import com.despaircorp.ui.BuildConfig
+import com.despaircorp.ui.R
 import com.despaircorp.ui.utils.NativeText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -22,7 +20,6 @@ class RestaurantsViewModel @Inject constructor(
     private val getNearbyRestaurantsWithUserLocationUseCase: GetNearbyRestaurantsWithUserLocationUseCase,
     private val getUserLocationUseCase: GetUserLocationUseCase,
     private val getDistanceBetweenUserAndPlacesUseCase: GetDistanceBetweenUserAndPlacesUseCase,
-    private val application: Application,
     coroutineDispatcherProvider: CoroutineDispatcherProvider,
 ) : ViewModel() {
 
