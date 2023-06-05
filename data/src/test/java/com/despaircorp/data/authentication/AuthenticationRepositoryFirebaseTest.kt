@@ -7,9 +7,12 @@ import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.domain.authentication.model.AuthenticatedUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -25,7 +28,10 @@ class AuthenticationRepositoryFirebaseTest {
     val testCoroutineRule = TestCoroutineRule()
 
     private val firebaseAuth: FirebaseAuth = mockk()
-
+    
+    private val authStateListener: FirebaseAuth.AuthStateListener = mockk()
+    
+    
     private val authenticationRepositoryFirebase = AuthenticationRepositoryFirebase(
         firebaseAuth = firebaseAuth,
         coroutineDispatcherProvider = testCoroutineRule.getTestCoroutineDispatcherProvider(),
@@ -34,6 +40,8 @@ class AuthenticationRepositoryFirebaseTest {
     @Before
     fun setUp() {
         every { firebaseAuth.currentUser } returns getDefaultFirebaseUser()
+        every { authStateListener.onAuthStateChanged(any()) } just Runs
+    
     }
 
     @Test
@@ -43,6 +51,14 @@ class AuthenticationRepositoryFirebaseTest {
 
         // Then
         assertThat(result).isEqualTo(getDefaultAuthenticatedUser())
+    }
+    
+    @Ignore
+    @Test
+    fun `edge case - getUser flow`() = testCoroutineRule.runTest {
+        authenticationRepositoryFirebase.getUserFlow().collect {
+            println(it.toString())
+        }
     }
 
     @Test

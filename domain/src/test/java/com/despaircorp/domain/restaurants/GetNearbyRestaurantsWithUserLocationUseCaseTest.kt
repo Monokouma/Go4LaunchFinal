@@ -15,6 +15,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.currentTime
@@ -70,7 +71,7 @@ class GetNearbyRestaurantsWithUserLocationUseCaseTest {
     @Test
     fun `edge case - no location`() = testCoroutineRule.runTest {
         // Given
-        every { getUserLocationUseCase.invoke() } returns flowOf()
+        every { getUserLocationUseCase.invoke() } returns emptyFlow()
 
         // When
         getNearbyRestaurantsWithUserLocationUseCase.invoke().test {
@@ -125,9 +126,9 @@ class GetNearbyRestaurantsWithUserLocationUseCaseTest {
             id = "$DEFAULT_ID$index",
             name = "$DEFAULT_NAME$index",
             photoUrl = "$DEFAULT_PHOTO_URL$index",
-            latitude = DEFAULT_LATITUDE,
-            longitude = DEFAULT_LONGITUDE,
-            isOpennedNow = false,
+            latitude = Latitude(DEFAULT_LATITUDE),
+            longitude = Longitude(DEFAULT_LONGITUDE),
+            isOpenedNow = false,
             workmateInside = index.takeIf { it != 0 },
             vicinity = "$DEFAULT_VICINITY$index",
             rating = (3.0 + index).coerceAtMost(5.0),

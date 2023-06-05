@@ -116,10 +116,10 @@ data class OpeningHours(
 data class Location(
 
 	@field:SerializedName("lng")
-	val lng: Any? = null,
+	val lng: Double? = null,
 
 	@field:SerializedName("lat")
-	val lat: Any? = null
+	val lat: Double? = null
 )
 
 data class PlusCode(

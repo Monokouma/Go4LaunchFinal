@@ -31,35 +31,36 @@ class GetDistanceBetweenUserAndPlacesUseCasUnitTest {
     private val locationRepository: LocationRepository = mockk()
     
     private val getDistanceBetweenUserAndPlacesUseCase = GetDistanceBetweenUserAndPlacesUseCase(
-        locationRepository,
+        locationRepository = locationRepository,
     )
     
     @Before
     fun setup() {
-        coEvery { locationRepository.getUserCurrentLocationFlow() } returns flowOf(getDefaultLocationEntity())
         coEvery {
             locationRepository.getDistanceBetweenPlaceAndUser(
-                getDefaultLocationEntity(),
-                DEFAULT_RESTAURANT_LATITUDE,
-                DEFAULT_RESTAURANT_LONGITUDE
+                userLocation = getDefaultLocationEntity(),
+                restaurantLat = DEFAULT_RESTAURANT_LATITUDE,
+                restaurantLong = DEFAULT_RESTAURANT_LONGITUDE
             )
         } returns DEFAULT_DISTANCE
     }
     
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
+        //When
         val result = getDistanceBetweenUserAndPlacesUseCase.invoke(
-            getDefaultLocationEntity(),
-            DEFAULT_RESTAURANT_LATITUDE,
-            DEFAULT_RESTAURANT_LONGITUDE
+            userLocation = getDefaultLocationEntity(),
+            restaurantLat = DEFAULT_RESTAURANT_LATITUDE,
+            restaurantLong = DEFAULT_RESTAURANT_LONGITUDE
         )
         
+        //Then
         assertThat(result).isEqualTo(DEFAULT_DISTANCE)
         coVerify(exactly = 1) {
             locationRepository.getDistanceBetweenPlaceAndUser(
-                getDefaultLocationEntity(),
-                DEFAULT_RESTAURANT_LATITUDE,
-                DEFAULT_RESTAURANT_LONGITUDE
+                userLocation = getDefaultLocationEntity(),
+                restaurantLat = DEFAULT_RESTAURANT_LATITUDE,
+                restaurantLong = DEFAULT_RESTAURANT_LONGITUDE
             )
         }
         confirmVerified(locationRepository)
