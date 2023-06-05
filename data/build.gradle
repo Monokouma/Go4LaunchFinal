@@ -3,8 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-kapt'
-    id 'org.jetbrains.kotlin.android'
     id "org.jetbrains.kotlinx.kover"
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -17,8 +17,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-        buildConfigField("String", "google_maps_key", getApiKey())
-
     }
 
     buildTypes {
@@ -75,11 +73,4 @@ kover {
     instrumentation {
         excludeTasks.add "testReleaseUnitTest"
     }
-}
-
-String getApiKey() {
-    def propFile = rootProject.file("./local.properties")
-    def properties = new Properties()
-    properties.load(new FileInputStream(propFile))
-    return properties['MAPS_API_KEY']
 }

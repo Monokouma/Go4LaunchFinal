@@ -40,7 +40,6 @@ class RestaurantsViewModel @Inject constructor(
             getNearbyRestaurantsWithUserLocationUseCase.invoke(),
             getUserLocationUseCase.invoke()
         ) { nearbyRestaurants, userLocation ->
-Log.i("Monokouma", BuildConfig.google_maps_key)
             emit(
                 RestaurantsViewState(
                     restaurants = nearbyRestaurants.map { nearbyRestaurant ->
@@ -53,7 +52,7 @@ Log.i("Monokouma", BuildConfig.google_maps_key)
                         val pictureUrl = StringBuilder()
                             .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
                             .append(nearbyRestaurant.photoUrl)
-                            .append("&key=${BuildConfig.google_maps_key}")
+                            .append("&key=${BuildConfig.MAPS_API_KEY}")
                             .toString()
 
                         RestaurantsViewStateItems(
