@@ -19,6 +19,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
 
+        buildConfigField("String", "google_maps_key", getApiKey())
     }
 
     buildTypes {
@@ -98,4 +99,11 @@ kover {
 
 kapt {
     correctErrorTypes true
+}
+
+String getApiKey() {
+    def propFile = rootProject.file("./local.properties")
+    def properties = new Properties()
+    properties.load(new FileInputStream(propFile))
+    return properties['MAPS_API_KEY']
 }

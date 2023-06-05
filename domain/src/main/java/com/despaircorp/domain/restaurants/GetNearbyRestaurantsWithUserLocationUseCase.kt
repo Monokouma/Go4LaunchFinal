@@ -1,5 +1,6 @@
 package com.despaircorp.domain.restaurants
 
+import android.util.Log
 import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.restaurants.model.RestaurantEntity
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +12,8 @@ class GetNearbyRestaurantsWithUserLocationUseCase @Inject constructor(
     private val getUserLocationUseCase: GetUserLocationUseCase
 ) {
     fun invoke(): Flow<List<RestaurantEntity>> = getUserLocationUseCase.invoke().mapLatest { location ->
-        restaurantsRepository.getNearbyRestaurantsList(location)
+        restaurantsRepository.getNearbyRestaurantsList(
+            location = location,
+        )
     }
 }

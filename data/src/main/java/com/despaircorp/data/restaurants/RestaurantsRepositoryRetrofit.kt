@@ -1,5 +1,8 @@
 package com.despaircorp.data.restaurants
 
+import android.app.Application
+import com.despaircorp.data.BuildConfig
+import com.despaircorp.data.R
 import com.despaircorp.data.retrofit.GooglePlacesApi
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.LocationEntity

@@ -1,10 +1,12 @@
 package com.despaircorp.ui.map
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.domain.utils.CoroutineDispatcherProvider
+import com.despaircorp.ui.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
