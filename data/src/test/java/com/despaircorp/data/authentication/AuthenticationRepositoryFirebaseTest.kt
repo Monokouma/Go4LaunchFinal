@@ -3,14 +3,20 @@ package com.despaircorp.data.authentication
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
+import assertk.fail
 import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.domain.authentication.model.AuthenticatedUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.Runs
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
+import io.mockk.verify
+import kotlinx.coroutines.flow.collect
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -29,9 +35,6 @@ class AuthenticationRepositoryFirebaseTest {
 
     private val firebaseAuth: FirebaseAuth = mockk()
     
-    private val authStateListener: FirebaseAuth.AuthStateListener = mockk()
-    
-    
     private val authenticationRepositoryFirebase = AuthenticationRepositoryFirebase(
         firebaseAuth = firebaseAuth,
         coroutineDispatcherProvider = testCoroutineRule.getTestCoroutineDispatcherProvider(),
@@ -40,8 +43,6 @@ class AuthenticationRepositoryFirebaseTest {
     @Before
     fun setUp() {
         every { firebaseAuth.currentUser } returns getDefaultFirebaseUser()
-        every { authStateListener.onAuthStateChanged(any()) } just Runs
-    
     }
 
     @Test
@@ -53,12 +54,28 @@ class AuthenticationRepositoryFirebaseTest {
         assertThat(result).isEqualTo(getDefaultAuthenticatedUser())
     }
     
-    @Ignore
     @Test
-    fun `edge case - getUser flow`() = testCoroutineRule.runTest {
-        authenticationRepositoryFirebase.getUserFlow().collect {
-            println(it.toString())
+    fun `nominal case - getUser flow`() = testCoroutineRule.runTest {
+        val mockAuth = mockk<FirebaseAuth>()
+    
+        // Capture the AuthStateListener
+        val authStateListenerSlot = slot<FirebaseAuth.AuthStateListener>()
+    
+        // Expect the addAuthStateListener function to be called, and capture the argument
+        every { mockAuth.addAuthStateListener(capture(authStateListenerSlot)) } just Runs
+    
+        authenticationRepositoryFirebase.getUserFlow()
+    
+        // Verify that the mockAuth.addAuthStateListener() function has been called
+        verify(exactly = 1) { mockAuth.addAuthStateListener(any()) }
+    
+        // Now you can invoke the captured AuthStateListener if it was captured
+        if (authStateListenerSlot.isCaptured) {
+            authStateListenerSlot.captured.onAuthStateChanged(mockAuth)
+        } else {
+            fail("AuthStateListener was not captured")
         }
+    
     }
 
     @Test

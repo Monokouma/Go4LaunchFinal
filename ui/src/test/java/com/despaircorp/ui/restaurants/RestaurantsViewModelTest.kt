@@ -11,6 +11,7 @@ import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.location.model.Longitude
 import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.ui.BuildConfig
 import com.despaircorp.ui.R
 import com.despaircorp.ui.utils.NativeText
 import com.despaircorp.ui.utils.TestCoroutineRule
@@ -164,7 +165,7 @@ class RestaurantsViewModelTest {
             val photoUrl = StringBuilder()
                 .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
                 .append(it.photoUrl)
-                .append("&key=AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM")
+                .append("&key=${BuildConfig.MAPS_API_KEY}")
                 .toString()
 
             restaurants.add(
@@ -192,7 +193,7 @@ class RestaurantsViewModelTest {
             val photoUrl = StringBuilder()
                 .append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&maxheigth=1080&photo_reference=")
                 .append(it.photoUrl)
-                .append("&key=AIzaSyBKiwewtTkztYvFNYqUG0jQUWzUnmfHBWM")
+                .append("&key=${BuildConfig.MAPS_API_KEY}")
                 .toString()
 
             restaurants.add(
