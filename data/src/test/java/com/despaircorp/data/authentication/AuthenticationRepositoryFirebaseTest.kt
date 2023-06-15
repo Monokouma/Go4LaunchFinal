@@ -66,6 +66,7 @@ class AuthenticationRepositoryFirebaseTest {
     
         authenticationRepositoryFirebase.getUserFlow()
     
+        
         // Verify that the mockAuth.addAuthStateListener() function has been called
         verify(exactly = 1) { mockAuth.addAuthStateListener(any()) }
     
