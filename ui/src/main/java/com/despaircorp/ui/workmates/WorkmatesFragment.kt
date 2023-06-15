@@ -19,7 +19,12 @@ class WorkmatesFragment : Fragment(R.layout.workmates_fragment) {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val adapter = WorkmatesAdapter()
+        
+        binding.workmateFragmentCoworkerRecyclerView.adapter = adapter
         viewModel.test()
-        Log.i("Monokouma", "lol")
+        viewModel.workmatesViewStateLiveData.observe(viewLifecycleOwner) {
+            adapter.submitList(it.workmatesViewStateItems)
+        }
     }
 }
