@@ -15,26 +15,8 @@ import javax.inject.Inject
 class CoworkersFirebaseRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ): CoworkersRepository {
-    override fun getCoworkers(): Flow<List<UserEntity>> = callbackFlow {
-        val registration = firestore.collection("users")
-            .document()
-            .addSnapshotListener { documentSnapshot, exception ->
-                if (documentSnapshot != null) {
-                    try {
-                        Log.i("Monokouma", documentSnapshot.toString())
-                    
-                        
-                    } catch (e: Exception) {
-                        coroutineContext.ensureActive()
-                        e.printStackTrace()
-                    }
-                }
-            
-                exception?.printStackTrace()
-            }
-    
-        awaitClose { registration.remove() }
-    
+    override fun getCoworkers() {
+        Log.i("Monokouma", ",rkrkkr")
     }
     
 }
