@@ -1,5 +1,6 @@
 package com.despaircorp.data.authentication
 
+import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isNull
@@ -10,13 +11,16 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.test.runCurrent
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
@@ -56,26 +60,26 @@ class AuthenticationRepositoryFirebaseTest {
     
     @Test
     fun `nominal case - getUser flow`() = testCoroutineRule.runTest {
-        val mockAuth = mockk<FirebaseAuth>()
-    
-        // Capture the AuthStateListener
+        // Given
         val authStateListenerSlot = slot<FirebaseAuth.AuthStateListener>()
-    
-        // Expect the addAuthStateListener function to be called, and capture the argument
-        every { mockAuth.addAuthStateListener(capture(authStateListenerSlot)) } just Runs
-    
-        authenticationRepositoryFirebase.getUserFlow()
-    
-        // Verify that the mockAuth.addAuthStateListener() function has been called
-        verify(exactly = 1) { mockAuth.addAuthStateListener(any()) }
-    
-        // Now you can invoke the captured AuthStateListener if it was captured
-        if (authStateListenerSlot.isCaptured) {
-            authStateListenerSlot.captured.onAuthStateChanged(mockAuth)
-        } else {
-            fail("AuthStateListener was not captured")
+        justRun { firebaseAuth.addAuthStateListener(capture(authStateListenerSlot)) }
+
+        // When
+        authenticationRepositoryFirebase.getUserFlow().test {
+            runCurrent()
+            authStateListenerSlot.captured.onAuthStateChanged(firebaseAuth)
+
+            val result = awaitItem()
+
+            // Then
+            assertThat(result).isEqualTo(getDefaultAuthenticatedUser())
         }
-    
+        verify(exactly = 1) {
+            firebaseAuth.addAuthStateListener(any())
+            firebaseAuth.currentUser
+            firebaseAuth.removeAuthStateListener(authStateListenerSlot.captured)
+        }
+        confirmVerified(firebaseAuth)
     }
 
     @Test
