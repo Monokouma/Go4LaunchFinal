@@ -1,4 +1,4 @@
-package com.despaircorp.data.restaurants
+package com.despaircorp.data.restaurants.list
 
 import assertk.assertThat
 import assertk.assertions.hasSize
@@ -7,7 +7,7 @@ import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.location.model.Longitude
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.junit.Before

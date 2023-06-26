@@ -1,8 +1,7 @@
-package com.despaircorp.domain.restaurants
+package com.despaircorp.domain.restaurants.list
 
-import android.util.Log
 import com.despaircorp.domain.location.GetUserLocationUseCase
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject

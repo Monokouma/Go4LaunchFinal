@@ -1,19 +1,19 @@
-package com.despaircorp.data.restaurants
+package com.despaircorp.data.restaurants.list
 
 import com.google.gson.annotations.SerializedName
 
 data class RestaurantsDto(
-
-	@field:SerializedName("next_page_token")
+    
+    @field:SerializedName("next_page_token")
 	val nextPageToken: String? = null,
-
-	@field:SerializedName("html_attributions")
+    
+    @field:SerializedName("html_attributions")
 	val htmlAttributions: List<Any?>? = null,
-
-	@field:SerializedName("results")
+    
+    @field:SerializedName("results")
 	val results: List<ResultsItem>,
-
-	@field:SerializedName("status")
+    
+    @field:SerializedName("status")
 	val status: String? = null
 )
 
@@ -27,65 +27,65 @@ data class Southwest(
 )
 
 data class Viewport(
-
-	@field:SerializedName("southwest")
+    
+    @field:SerializedName("southwest")
 	val southwest: Southwest? = null,
-
-	@field:SerializedName("northeast")
+    
+    @field:SerializedName("northeast")
 	val northeast: Northeast? = null
 )
 
 data class ResultsItem(
-
-	@field:SerializedName("reference")
+    
+    @field:SerializedName("reference")
 	val reference: String? = null,
-
-	@field:SerializedName("types")
+    
+    @field:SerializedName("types")
 	val types: List<String?>? = null,
-
-	@field:SerializedName("scope")
+    
+    @field:SerializedName("scope")
 	val scope: String? = null,
-
-	@field:SerializedName("icon")
+    
+    @field:SerializedName("icon")
 	val icon: String? = null,
-
-	@field:SerializedName("name")
+    
+    @field:SerializedName("name")
 	val name: String? = null,
-
-	@field:SerializedName("geometry")
+    
+    @field:SerializedName("geometry")
 	val geometry: Geometry? = null,
-
-	@field:SerializedName("icon_background_color")
+    
+    @field:SerializedName("icon_background_color")
 	val iconBackgroundColor: String? = null,
-
-	@field:SerializedName("icon_mask_base_uri")
+    
+    @field:SerializedName("icon_mask_base_uri")
 	val iconMaskBaseUri: String? = null,
-
-	@field:SerializedName("vicinity")
+    
+    @field:SerializedName("vicinity")
 	val vicinity: String? = null,
-
-	@field:SerializedName("photos")
+    
+    @field:SerializedName("photos")
 	val photos: List<PhotosItem?>? = null,
-
-	@field:SerializedName("place_id")
+    
+    @field:SerializedName("place_id")
 	val placeId: String? = null,
-
-	@field:SerializedName("business_status")
+    
+    @field:SerializedName("business_status")
 	val businessStatus: String? = null,
-
-	@field:SerializedName("rating")
+    
+    @field:SerializedName("rating")
 	val rating: Any? = null,
-
-	@field:SerializedName("user_ratings_total")
+    
+    @field:SerializedName("user_ratings_total")
 	val userRatingsTotal: Int? = null,
-
-	@field:SerializedName("price_level")
+    
+    @field:SerializedName("price_level")
 	val priceLevel: Int? = null,
-
-	@field:SerializedName("opening_hours")
+    
+    @field:SerializedName("opening_hours")
 	val openingHours: OpeningHours? = null,
-
-	@field:SerializedName("plus_code")
+    
+    @field:SerializedName("plus_code")
 	val plusCode: PlusCode? = null
 )
 
@@ -99,11 +99,11 @@ data class Northeast(
 )
 
 data class Geometry(
-
-	@field:SerializedName("viewport")
+    
+    @field:SerializedName("viewport")
 	val viewport: Viewport? = null,
-
-	@field:SerializedName("location")
+    
+    @field:SerializedName("location")
 	val location: Location? = null
 )
 

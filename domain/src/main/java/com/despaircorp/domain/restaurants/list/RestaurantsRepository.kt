@@ -1,7 +1,7 @@
-package com.despaircorp.domain.restaurants
+package com.despaircorp.domain.restaurants.list
 
 import com.despaircorp.domain.location.model.LocationEntity
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 
 interface RestaurantsRepository {
 

@@ -1,11 +1,11 @@
-package com.despaircorp.ui.restaurants
+package com.despaircorp.ui.restaurants.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.location.GetDistanceBetweenUserAndPlacesUseCase
 import com.despaircorp.domain.location.GetUserLocationUseCase
-import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
+import com.despaircorp.domain.restaurants.list.GetNearbyRestaurantsWithUserLocationUseCase
 import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import com.despaircorp.ui.BuildConfig
 import com.despaircorp.ui.R

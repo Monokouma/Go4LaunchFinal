@@ -1,4 +1,4 @@
-package com.despaircorp.ui.restaurants
+package com.despaircorp.ui.restaurants.list
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -9,8 +9,8 @@ import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.location.model.Longitude
-import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.GetNearbyRestaurantsWithUserLocationUseCase
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 import com.despaircorp.ui.BuildConfig
 import com.despaircorp.ui.R
 import com.despaircorp.ui.utils.NativeText

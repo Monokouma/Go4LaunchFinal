@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.despaircorp.ui.databinding.CoworkersItemsBinding
-import com.despaircorp.ui.restaurants.RestaurantsViewStateItems
 
 class WorkmatesAdapter(): ListAdapter<WorkmatesViewStateItems, WorkmatesAdapter.WorkmatesViewHolder>(WorkmateDiffUtil) {
     

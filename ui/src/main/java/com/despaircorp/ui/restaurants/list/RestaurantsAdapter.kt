@@ -1,4 +1,4 @@
-package com.despaircorp.ui.restaurants
+package com.despaircorp.ui.restaurants.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +13,9 @@ import com.despaircorp.ui.utils.setTextColorRes
 
 class RestaurantsAdapter(
     val restaurantsListener: RestaurantsListener
-) : ListAdapter<RestaurantsViewStateItems, RestaurantsAdapter.RestaurantViewHolder>(RestaurantDiffUtil) {
+) : ListAdapter<RestaurantsViewStateItems, RestaurantsAdapter.RestaurantViewHolder>(
+    RestaurantDiffUtil
+) {
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = RestaurantViewHolder(
         RestaurantsItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
