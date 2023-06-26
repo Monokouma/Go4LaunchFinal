@@ -5,8 +5,8 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.Longitude
-import com.despaircorp.domain.restaurants.GetNearbyRestaurantsWithUserLocationUseCase
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.GetNearbyRestaurantsWithUserLocationUseCase
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 import com.despaircorp.ui.utils.TestCoroutineRule
 import com.despaircorp.ui.utils.observeForTesting
 import io.mockk.every

@@ -1,4 +1,4 @@
-package com.despaircorp.domain.restaurants.model
+package com.despaircorp.domain.restaurants.list.model
 
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.Longitude

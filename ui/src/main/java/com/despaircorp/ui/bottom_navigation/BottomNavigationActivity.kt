@@ -9,14 +9,13 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.BottomNavigationActivityBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.map.MapFragment
-import com.despaircorp.ui.restaurants.RestaurantsFragment
+import com.despaircorp.ui.restaurants.list.RestaurantsFragment
 import com.despaircorp.ui.utils.viewBinding
 import com.despaircorp.ui.workmates.WorkmatesFragment
 import dagger.hilt.android.AndroidEntryPoint

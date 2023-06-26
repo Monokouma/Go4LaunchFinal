@@ -1,14 +1,12 @@
-package com.despaircorp.data.restaurants
+package com.despaircorp.data.restaurants.list
 
-import android.app.Application
 import com.despaircorp.data.BuildConfig
-import com.despaircorp.data.R
 import com.despaircorp.data.retrofit.GooglePlacesApi
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.location.model.Longitude
-import com.despaircorp.domain.restaurants.RestaurantsRepository
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.RestaurantsRepository
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 import javax.inject.Inject
 
 class RestaurantsRepositoryRetrofit @Inject constructor(
@@ -22,7 +20,6 @@ class RestaurantsRepositoryRetrofit @Inject constructor(
             apiKey = BuildConfig.MAPS_API_KEY,
             type = "restaurant"
         )
-
         return restaurantsDto.results.mapNotNull { result ->
             RestaurantEntity(
                 id = result.placeId ?: return@mapNotNull null,
@@ -33,7 +30,7 @@ class RestaurantsRepositoryRetrofit @Inject constructor(
                 isOpenedNow = result.openingHours?.openNow == true,
                 workmateInside = 4,
                 vicinity = result.vicinity ?: return@mapNotNull null,
-                rating = result.rating as Double
+                rating = result.rating as Double?
             )
         }
     }

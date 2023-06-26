@@ -1,13 +1,13 @@
-package com.despaircorp.ui.restaurants
+package com.despaircorp.ui.restaurants.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.RestaurantsFragmentBinding
+import com.despaircorp.ui.restaurants.details.RestaurantDetailsActivity
 import com.despaircorp.ui.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,12 +23,11 @@ class RestaurantsFragment : Fragment(R.layout.restaurants_fragment), Restaurants
         binding.restaurantListFragRecyclerView.adapter = restaurantAdapter
         viewModel.viewState.observe(viewLifecycleOwner) {
             restaurantAdapter.submitList(it.restaurants)
-            Log.i("Monokouma", it.restaurants.toString())
             binding.restaurantListFragProgressIndicator.isVisible = it.isSpinnerVisible
         }
     }
 
     override fun onRestaurantClick(placeId: String) {
-
+        startActivity(RestaurantDetailsActivity.navigate(requireContext(), placeId = placeId))
     }
 }

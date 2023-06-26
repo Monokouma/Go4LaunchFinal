@@ -1,4 +1,4 @@
-package com.despaircorp.ui.restaurants
+package com.despaircorp.ui.restaurants.list
 
 import androidx.annotation.ColorRes
 import com.despaircorp.ui.utils.NativeText

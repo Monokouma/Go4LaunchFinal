@@ -1,4 +1,4 @@
-package com.despaircorp.domain.restaurants
+package com.despaircorp.domain.restaurants.list
 
 import app.cash.turbine.test
 import assertk.assertThat
@@ -7,7 +7,7 @@ import com.despaircorp.domain.location.GetUserLocationUseCase
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.LocationEntity
 import com.despaircorp.domain.location.model.Longitude
-import com.despaircorp.domain.restaurants.model.RestaurantEntity
+import com.despaircorp.domain.restaurants.list.model.RestaurantEntity
 import com.despaircorp.domain.utils.TestCoroutineRule
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -67,7 +67,7 @@ class GetNearbyRestaurantsWithUserLocationUseCaseTest {
             confirmVerified(getUserLocationUseCase, restaurantsRepository)
         }
     }
-
+ 
     @Test
     fun `edge case - no location`() = testCoroutineRule.runTest {
         // Given
