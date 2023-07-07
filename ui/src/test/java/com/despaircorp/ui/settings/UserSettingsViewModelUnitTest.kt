@@ -58,12 +58,26 @@ class UserSettingsViewModelUnitTest {
         coEvery { saveNewUserNameUseCase.invoke(DEFAULT_NAME) } returns true
         coEvery { saveNewEmailAddressIUseCase.invoke(DEFAULT_EMAIL) } returns true
         coEvery { saveNewPasswordUsedCase.invoke(DEFAULT_PASSWORD) } returns true
+        coEvery { saveNotificationReceivingStateUseCase.invoke(DEFAULT_IS_USER_ENABLED_NOTIF) } returns true
     }
     
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
         viewModel.viewState.observeForTesting(this) {
             assertThat(it.value).isEqualTo(provideUserSettingsViewState())
+        }
+    }
+    
+    @Test
+    fun `user modified is notification status should return false`() = testCoroutineRule.runTest {
+        coEvery { saveNotificationReceivingStateUseCase.invoke(false) } returns true
+        //Given
+        viewModel.onSwitchCheckedChange(false)
+        
+        //When
+        viewModel.viewState.observeForTesting(this) {
+            //Then
+            assertThat(it.value).isEqualTo(UserSettingsViewState(isNotificationEnabled = false))
         }
     }
     
@@ -155,6 +169,7 @@ class UserSettingsViewModelUnitTest {
     private fun provideUserSettingsViewState() = UserSettingsViewState(
         isNotificationEnabled = DEFAULT_IS_USER_ENABLED_NOTIF
     )
+    
     
     private fun provideUserEntity() = UserEntity(
         id = DEFAULT_ID,
