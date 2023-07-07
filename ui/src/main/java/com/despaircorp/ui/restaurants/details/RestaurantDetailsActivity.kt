@@ -15,19 +15,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class RestaurantDetailsActivity : AppCompatActivity() {
     private val binding by viewBinding { ActivityRestaurantDetailsBinding.inflate(it) }
     private val viewModel: RestaurantDetailsViewModel by viewModels()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.restaurantDetailsToolBar)
-        supportActionBar?.setDisplayShowTitleEnabled(false);
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         binding.restaurantDetailsToolBar.setNavigationOnClickListener {
             finish()
         }
-        intent.getStringExtra(ARG_PLACE_ID)?.let {
-            viewModel.onCreateActivity(it)
-        }
-        
+
         viewModel.viewState.observe(this) { viewState ->
             binding.restaurantDetailsTextViewRestaurantName.text = viewState.name
             binding.restaurantDetailsRatingBar.rating = viewState.rating?.toFloat() ?: 0f
@@ -35,31 +32,35 @@ class RestaurantDetailsActivity : AppCompatActivity() {
                 .load(viewState.photoUrl)
                 .into(binding.restaurantDetailsImageViewRestaurantImage)
             binding.restaurantDetailsTextViewRestaurantType.text = viewState.vicinity
-            
-            binding.restaurantDetailsImageViewWebsite.setOnClickListener {
+
+            binding.restaurantDetailsViewWebsite.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(viewState.websiteUrl))
                 startActivity(browserIntent)
             }
-            
-            binding.restaurantDetailsImageViewPhone.setOnClickListener {
+
+            binding.restaurantDetailsViewStar.setOnClickListener {
+
+            }
+
+            binding.restaurantDetailsViewPhone.setOnClickListener {
                 val intent = Intent(Intent.ACTION_DIAL)
                 intent.data = Uri.parse("tel:" + viewState.phoneNumber)
                 startActivity(intent)
             }
         }
     }
-    
+
     companion object {
         const val ARG_PLACE_ID = "ARG_PLACE_ID"
-        
-          fun navigate(
-              context: Context,
-              placeId: String
-          ): Intent = Intent(
-              context,
-              RestaurantDetailsActivity::class.java
-          ).apply {
-              putExtra(ARG_PLACE_ID, placeId)
-          }
+
+        fun navigate(
+            context: Context,
+            placeId: String
+        ): Intent = Intent(
+            context,
+            RestaurantDetailsActivity::class.java
+        ).apply {
+            putExtra(ARG_PLACE_ID, placeId)
+        }
     }
 }

@@ -23,6 +23,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BottomNavigationActivity : AppCompatActivity() {
+
+    companion object {
+        private const val KEY_BOTTOM_NAV_BAR_SELECTED_ITEM_ID = "KEY_BOTTOM_NAV_BAR_SELECTED_ITEM_ID"
+        fun navigate(context: Context) = Intent(context, BottomNavigationActivity::class.java)
+    }
+
     private val binding by viewBinding { BottomNavigationActivityBinding.inflate(it) }
     private val viewModel: BottomNavigationViewModel by viewModels()
 
@@ -49,15 +55,11 @@ class BottomNavigationActivity : AppCompatActivity() {
 
         binding.bottomNavigationActBottomBar.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_home -> {
-                    loadFragment(MapFragment())
-                    true
-                }
-                R.id.navigation_dashboard -> {
+                R.id.navigation_restaurants -> {
                     loadFragment(RestaurantsFragment())
                     true
                 }
-                R.id.navigation_notifications -> {
+                R.id.navigation_workmates -> {
                     loadFragment(WorkmatesFragment())
                     true
                 }
@@ -67,6 +69,8 @@ class BottomNavigationActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.bottomNavigationActBottomBar.selectedItemId =
+            savedInstanceState?.getInt(KEY_BOTTOM_NAV_BAR_SELECTED_ITEM_ID, R.id.navigation_map) ?: R.id.navigation_map
 
         val headerBinding = HeaderNavigationDrawerBinding.bind(
             binding.bottomNavigationActNavigationViewProfile.getHeaderView(0)
@@ -82,13 +86,22 @@ class BottomNavigationActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(binding.bottomNavigationActFrameLayout.id, fragment)
-            .commit()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putInt(KEY_BOTTOM_NAV_BAR_SELECTED_ITEM_ID, binding.bottomNavigationActBottomBar.selectedItemId)
     }
-    
+
+    private fun loadFragment(fragment: Fragment) {
+        val previousFragment = supportFragmentManager.findFragmentByTag(fragment.javaClass.name)
+        if (previousFragment == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(binding.bottomNavigationActFrameLayout.id, fragment, fragment.javaClass.name)
+                .commit()
+        }
+    }
+
     private fun getLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -100,12 +113,6 @@ class BottomNavigationActivity : AppCompatActivity() {
         ) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0)
             return
-        }
-    }
-
-    companion object {
-        fun navigate(context: Context): Intent {
-            return Intent(context, BottomNavigationActivity::class.java)
         }
     }
 }
