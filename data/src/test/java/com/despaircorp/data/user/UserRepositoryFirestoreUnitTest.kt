@@ -7,6 +7,7 @@ import assertk.assertions.isTrue
 import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.domain.user.model.UserEntity
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -40,9 +41,11 @@ class UserRepositoryFirestoreUnitTest {
     val testCoroutineRule = TestCoroutineRule()
     
     private val firestore: FirebaseFirestore = mockk()
+    private val auth: FirebaseAuth = mockk()
     
     private val userRepositoryFirestore = UserRepositoryFirestore(
         firestore,
+        auth
     )
     
     @Before
@@ -189,7 +192,8 @@ class UserRepositoryFirestoreUnitTest {
         name = DEFAULT_NAME,
         email = DEFAULT_EMAIL,
         photoUrl = DEFAULT_PHOTO_URL,
-        eating = false
+        eating = false,
+        hadNotificationOn = true
     )
     
     private fun provideUserDto() = UserDto(
@@ -197,7 +201,8 @@ class UserRepositoryFirestoreUnitTest {
         name = DEFAULT_NAME,
         emailAddress = DEFAULT_EMAIL,
         picture = DEFAULT_PHOTO_URL,
-        eating = false
+        eating = false,
+        hadNotificationOn = true
     )
     //end Region out
 }

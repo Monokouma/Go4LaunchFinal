@@ -85,7 +85,8 @@ class SaveCurrentUserUsedCaseUnitTest {
         name = DEFAULT_NAME,
         email = DEFAULT_EMAIL,
         photoUrl = DEFAULT_PHOTO_URL,
-        eating = false
+        eating = false,
+        hadNotificationOn = true
     )
     //end region IN
 }
