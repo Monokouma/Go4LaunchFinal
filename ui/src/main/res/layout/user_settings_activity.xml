@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_purple"
+    tools:context=".settings.UserSettingsActivity"
+    >
+    
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/user_settings_AppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/user_settings_ToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            app:title="@string/settings_string"
+            app:titleTextColor="@color/baby_powder"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+    
+    
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/user_settings_notif_Switch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:checked="true"
+        android:text="@string/notifications"
+        android:textColor="@color/baby_powder"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_AppBarLayout"
+        app:thumbTint="@color/baby_powder"
+        app:useMaterialThemeColors="true"
+        />
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/user_settings_username_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/baby_powder"
+        android:text="@string/change_your_username_here"
+        android:textColor="@color/dark_purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_notif_Switch"
+        />
+    
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_settings_username_TIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/new_username"
+        android:textColorHint="@color/baby_powder"
+        android:visibility="gone"
+        app:boxBackgroundColor="@color/baby_powder"
+        app:boxStrokeColor="@color/baby_powder"
+        app:layout_constraintEnd_toStartOf="@id/user_settings_username_save_Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_username_Button"
+        >
+        
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_settings_username_TIET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_purple"
+            android:foregroundTint="@color/baby_powder"
+            android:textColor="@color/baby_powder"
+            />
+    
+    </com.google.android.material.textfield.TextInputLayout>
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/user_settings_username_save_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/baby_powder"
+        android:text="@string/ok"
+        android:textColor="@color/dark_purple"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/user_settings_username_TIL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_username_Button"
+        />
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/user_settings_email_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/baby_powder"
+        android:text="@string/change_your_email_here"
+        android:textColor="@color/dark_purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_username_TIL"
+        />
+    
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_settings_email_TIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/new_email"
+        android:textColorHint="@color/baby_powder"
+        android:visibility="gone"
+        app:boxBackgroundColor="@color/baby_powder"
+        app:boxStrokeColor="@color/baby_powder"
+        app:layout_constraintEnd_toStartOf="@id/user_settings_email_save_Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_email_Button"
+        >
+        
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_settings_email_TIET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_purple"
+            android:foregroundTint="@color/baby_powder"
+            android:textColor="@color/baby_powder"
+            />
+    
+    </com.google.android.material.textfield.TextInputLayout>
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/user_settings_email_save_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/baby_powder"
+        android:text="@string/ok"
+        android:textColor="@color/dark_purple"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/user_settings_email_TIL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_email_Button"
+        />
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/user_settings_password_Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/baby_powder"
+        android:text="@string/change_your_password_here"
+        android:textColor="@color/dark_purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_email_TIL"
+        />
+    
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_settings_password_TIL"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/new_password"
+        android:textColorHint="@color/baby_powder"
+        android:visibility="gone"
+        app:boxBackgroundColor="@color/baby_powder"
+        app:boxStrokeColor="@color/baby_powder"
+        app:layout_constraintEnd_toStartOf="@id/user_settings_password_save_Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_password_Button"
+        >
+        
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_settings_password_TIET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dark_purple"
+            android:foregroundTint="@color/baby_powder"
+            android:inputType="textPassword"
+            android:textColor="@color/baby_powder"
+            />
+    
+    </com.google.android.material.textfield.TextInputLayout>
+    
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/user_settings_password_save_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/baby_powder"
+        android:text="@string/ok"
+        android:textColor="@color/dark_purple"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/user_settings_password_TIL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_settings_password_Button"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

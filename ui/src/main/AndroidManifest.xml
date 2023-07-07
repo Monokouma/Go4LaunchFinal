@@ -12,6 +12,10 @@
         android:usesCleartextTraffic="true"
         >
         <activity
+            android:name=".settings.UserSettingsActivity"
+            android:exported="false"
+            />
+        <activity
             android:name=".restaurants.details.RestaurantDetailsActivity"
             android:exported="false"
             />

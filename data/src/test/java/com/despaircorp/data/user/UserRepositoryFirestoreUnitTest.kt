@@ -2,48 +2,31 @@ package com.despaircorp.data.user
 
 import app.cash.turbine.test
 import assertk.assertThat
-import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.domain.user.model.UserEntity
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.util.Listener
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.confirmVerified
-import io.mockk.core.ValueClassSupport.boxedValue
 import io.mockk.every
-import io.mockk.just
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.runCurrent
-import net.bytebuddy.matcher.ElementMatchers.any
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import kotlin.time.Duration.Companion.seconds
 
 class UserRepositoryFirestoreUnitTest {
     companion object {
@@ -52,16 +35,16 @@ class UserRepositoryFirestoreUnitTest {
         private const val DEFAULT_EMAIL = "DEFAULT_EMAIL"
         private const val DEFAULT_PHOTO_URL = "DEFAULT_PHOTO_URL"
     }
-
+    
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
-
+    
     private val firestore: FirebaseFirestore = mockk()
-
+    
     private val userRepositoryFirestore = UserRepositoryFirestore(
         firestore,
     )
-
+    
     @Before
     fun setup() {
         coEvery {
@@ -70,16 +53,16 @@ class UserRepositoryFirestoreUnitTest {
                 .document(DEFAULT_ID)
                 .set(provideUserDto())
         } returns getDefaultSetUserTask()
-    
+        
         mockkStatic(FirebaseFirestore::class)
         mockkStatic(DocumentSnapshot::class)
     }
-
+    
     @Test
     fun `nominal case - save user`() = testCoroutineRule.runTest {
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isTrue()
         coVerify(exactly = 1) {
@@ -90,7 +73,7 @@ class UserRepositoryFirestoreUnitTest {
         }
         confirmVerified(firestore)
     }
-
+    
     @Test
     fun `error case - save user's coroutine is cancelled during run`() = testCoroutineRule.runTest {
         // Given
@@ -100,14 +83,14 @@ class UserRepositoryFirestoreUnitTest {
                 .document(DEFAULT_ID)
                 .set(provideUserDto())
         } throws CancellationException()
-
+        
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isFalse()
     }
-
+    
     @Test
     fun `error case - save user launches an exception`() = testCoroutineRule.runTest {
         // Given
@@ -118,14 +101,14 @@ class UserRepositoryFirestoreUnitTest {
                 .document(DEFAULT_ID)
                 .set(provideUserDto())
         } throws exception
-
+        
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isFalse()
     }
-
+    
     @Test
     fun `error case - save user task launches an exception`() = testCoroutineRule.runTest {
         // Given
@@ -138,14 +121,14 @@ class UserRepositoryFirestoreUnitTest {
         } returns getDefaultSetUserTask {
             every { this@getDefaultSetUserTask.exception } returns exception
         }
-
+        
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isFalse()
     }
-
+    
     
     @Ignore
     @Test
@@ -154,10 +137,10 @@ class UserRepositoryFirestoreUnitTest {
         val collectionReference: CollectionReference = mockk()
         val documentReference: DocumentReference = mockk()
         val documentSnapshot: DocumentSnapshot = mockk()
-    
+        
         // Mock UserDto
         val userDto = UserDto(DEFAULT_ID, DEFAULT_NAME, DEFAULT_EMAIL, DEFAULT_PHOTO_URL, false)
-    
+        
         val eventListenerSlot = slot<EventListener<DocumentSnapshot>>()
         justRun {
             documentReference.addSnapshotListener(capture(eventListenerSlot))
@@ -166,13 +149,13 @@ class UserRepositoryFirestoreUnitTest {
         every { documentSnapshot.exists() } returns true
         every { firestore.collection("users") } returns collectionReference
         every { collectionReference.document(any()) } returns documentReference
-
+        
         // Simulate the snapshot listener
         eventListenerSlot.captured.onEvent(documentSnapshot, null)
-    
+        
         // Calling the function to be tested
         val flow = userRepositoryFirestore.getUser(DEFAULT_ID)
-    
+        
         // Use turbine to test emissions
         flow.test {
             val userEntity = awaitItem()
@@ -180,40 +163,41 @@ class UserRepositoryFirestoreUnitTest {
             assertEquals(DEFAULT_NAME, userEntity?.name)
             assertEquals(DEFAULT_EMAIL, userEntity?.email)
             assertEquals(DEFAULT_PHOTO_URL, userEntity?.photoUrl)
-            assertEquals(false, userEntity?.isEating)
+            assertEquals(false, userEntity?.eating)
             awaitComplete()
         }
-    
+        
         // Verifying the interactions
         coVerify { documentReference.addSnapshotListener(any()) }
-
+        
     }
     
-    private inline fun getDefaultSetUserTask(crossinline mockkBlock: Task<Void>.() -> Unit = {}): Task<Void> = mockk {
-        every { isComplete } returns true
-        every { exception } returns null
-        every { isCanceled } returns false
-        every { result } returns mockk()
-
-        mockkBlock(this)
-    }
+    private inline fun getDefaultSetUserTask(crossinline mockkBlock: Task<Void>.() -> Unit = {}): Task<Void> =
+        mockk {
+            every { isComplete } returns true
+            every { exception } returns null
+            every { isCanceled } returns false
+            every { result } returns mockk()
+            
+            mockkBlock(this)
+        }
     
-
+    
     //Region out
     private fun provideUserEntity() = UserEntity(
         id = DEFAULT_ID,
         name = DEFAULT_NAME,
         email = DEFAULT_EMAIL,
         photoUrl = DEFAULT_PHOTO_URL,
-        isEating = false
+        eating = false
     )
-
+    
     private fun provideUserDto() = UserDto(
         uuid = DEFAULT_ID,
         name = DEFAULT_NAME,
         emailAddress = DEFAULT_EMAIL,
         picture = DEFAULT_PHOTO_URL,
-        isEating = false
+        eating = false
     )
     //end Region out
 }

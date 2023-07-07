@@ -16,6 +16,7 @@ import com.despaircorp.ui.databinding.BottomNavigationActivityBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.map.MapFragment
 import com.despaircorp.ui.restaurants.list.RestaurantsFragment
+import com.despaircorp.ui.settings.UserSettingsActivity
 import com.despaircorp.ui.utils.viewBinding
 import com.despaircorp.ui.workmates.WorkmatesFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +38,7 @@ class BottomNavigationActivity : AppCompatActivity() {
         binding.bottomNavigationActNavigationViewProfile.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.your_lunch -> Log.i("Monokouma", "your lunch")
-                R.id.settings -> Log.i("Monokouma", "settings")
+                R.id.settings -> startActivity(UserSettingsActivity.navigate(this))
                 R.id.logout -> {
                     finish()
                 }
