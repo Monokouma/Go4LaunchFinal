@@ -2,48 +2,30 @@ package com.despaircorp.data.user
 
 import app.cash.turbine.test
 import assertk.assertThat
-import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.domain.user.model.UserEntity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.auth.User
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.util.Listener
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.confirmVerified
-import io.mockk.core.ValueClassSupport.boxedValue
 import io.mockk.every
-import io.mockk.just
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
-import net.bytebuddy.matcher.ElementMatchers.any
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
-import kotlin.time.Duration.Companion.seconds
 
 class UserRepositoryFirestoreUnitTest {
     companion object {
@@ -51,17 +33,24 @@ class UserRepositoryFirestoreUnitTest {
         private const val DEFAULT_NAME = "DEFAULT_NAME"
         private const val DEFAULT_EMAIL = "DEFAULT_EMAIL"
         private const val DEFAULT_PHOTO_URL = "DEFAULT_PHOTO_URL"
+        private const val DEFAULT_USERNAME = "DEFAULT_USERNAME"
+        private const val DEFAULT_PASSWORD = "DEFAULT_PASSWORD"
+        private const val DEFAULT_NOTIFICATION_STATE = true
+        
     }
-
+    
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
-
+    
     private val firestore: FirebaseFirestore = mockk()
-
+    private val auth: FirebaseAuth = mockk()
+    
     private val userRepositoryFirestore = UserRepositoryFirestore(
         firestore,
+        auth,
+        testCoroutineRule.getTestCoroutineDispatcherProvider()
     )
-
+    
     @Before
     fun setup() {
         coEvery {
@@ -70,16 +59,41 @@ class UserRepositoryFirestoreUnitTest {
                 .document(DEFAULT_ID)
                 .set(provideUserDto())
         } returns getDefaultSetUserTask()
-    
-        mockkStatic(FirebaseFirestore::class)
-        mockkStatic(DocumentSnapshot::class)
+        
+        coEvery { auth.currentUser?.uid } returns DEFAULT_ID
+        
+        coEvery { auth.currentUser?.updateEmail(DEFAULT_EMAIL) } returns getDefaultSetUserTask()
+        
+        coEvery { auth.currentUser?.updatePassword(DEFAULT_PASSWORD) } returns getDefaultSetUserTask()
+        
+        coEvery {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("name", DEFAULT_USERNAME)
+        } returns getDefaultSetUserTask()
+        
+        coEvery {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("emailAddress", DEFAULT_EMAIL)
+        } returns getDefaultSetUserTask()
+        
+        coEvery {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("hadNotificationOn", DEFAULT_NOTIFICATION_STATE)
+        } returns getDefaultSetUserTask()
     }
-
+    
+    // region
     @Test
     fun `nominal case - save user`() = testCoroutineRule.runTest {
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isTrue()
         coVerify(exactly = 1) {
@@ -90,7 +104,136 @@ class UserRepositoryFirestoreUnitTest {
         }
         confirmVerified(firestore)
     }
-
+    
+    @Test
+    fun `user change is username with success`() = testCoroutineRule.runTest {
+        val result = userRepositoryFirestore.saveNewUserName(DEFAULT_USERNAME)
+        
+        assertThat(result).isTrue()
+        
+        coVerify(exactly = 1) {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("name", DEFAULT_USERNAME)
+            
+            
+        }
+        confirmVerified(firestore)
+    }
+    
+    @Test
+    fun `user change is email with success`() = testCoroutineRule.runTest {
+        val result = userRepositoryFirestore.saveNewEmail(DEFAULT_EMAIL)
+        
+        assertThat(result).isTrue()
+        
+        coVerify(exactly = 1) {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("emailAddress", DEFAULT_EMAIL)
+            
+            
+        }
+        
+        confirmVerified(firestore)
+    }
+    
+    @Test
+    fun `user change is password with success`() = testCoroutineRule.runTest {
+        val result = userRepositoryFirestore.saveNewPassword(DEFAULT_PASSWORD)
+        
+        assertThat(result).isTrue()
+        
+        coVerify(exactly = 1) {
+            auth.currentUser?.updatePassword(DEFAULT_PASSWORD)
+        }
+        
+        confirmVerified(auth)
+    }
+    
+    @Test
+    fun `user change is notification test with success`() = testCoroutineRule.runTest {
+        val result = userRepositoryFirestore.saveNewNotificationReceivingState(
+            DEFAULT_NOTIFICATION_STATE
+        )
+        
+        assertThat(result).isTrue()
+        
+        coVerify(exactly = 1) {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("hadNotificationOn", DEFAULT_NOTIFICATION_STATE)
+        }
+        confirmVerified(firestore)
+    }
+    
+    @Test
+    fun `user change is username with failure`() = testCoroutineRule.runTest {
+        // Given
+        coEvery {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("name", DEFAULT_USERNAME)
+        } throws CancellationException()
+        
+        // When
+        val result = userRepositoryFirestore.saveNewUserName(DEFAULT_USERNAME)
+        
+        // Then
+        assertThat(result).isFalse()
+    }
+    
+    @Test
+    fun `user change is email with failure`() = testCoroutineRule.runTest {
+        // Given
+        coEvery {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("emailAddress", DEFAULT_EMAIL)
+        } throws CancellationException()
+        
+        // When
+        val result = userRepositoryFirestore.saveNewEmail(DEFAULT_EMAIL)
+        
+        // Then
+        assertThat(result).isFalse()
+    }
+    
+    @Test
+    fun `user change is password with failure`() = testCoroutineRule.runTest {
+        coEvery {
+            auth.currentUser?.updatePassword(DEFAULT_PASSWORD)
+        } throws CancellationException()
+        
+        val result = userRepositoryFirestore.saveNewPassword(DEFAULT_PASSWORD)
+        
+        assertThat(result).isFalse()
+    }
+    
+    @Test
+    fun `user change is notification test with failure`() = testCoroutineRule.runTest {
+        // Given
+        coEvery {
+            firestore
+                .collection("users")
+                .document(DEFAULT_ID)
+                .update("hadNotificationOn", DEFAULT_NOTIFICATION_STATE)
+        } throws CancellationException()
+        
+        // When
+        val result = userRepositoryFirestore.saveNewNotificationReceivingState(
+            DEFAULT_NOTIFICATION_STATE
+        )
+        
+        // Then
+        assertThat(result).isFalse()
+    }
+    
     @Test
     fun `error case - save user's coroutine is cancelled during run`() = testCoroutineRule.runTest {
         // Given
@@ -100,14 +243,14 @@ class UserRepositoryFirestoreUnitTest {
                 .document(DEFAULT_ID)
                 .set(provideUserDto())
         } throws CancellationException()
-
+        
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isFalse()
     }
-
+    
     @Test
     fun `error case - save user launches an exception`() = testCoroutineRule.runTest {
         // Given
@@ -118,14 +261,14 @@ class UserRepositoryFirestoreUnitTest {
                 .document(DEFAULT_ID)
                 .set(provideUserDto())
         } throws exception
-
+        
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isFalse()
     }
-
+    
     @Test
     fun `error case - save user task launches an exception`() = testCoroutineRule.runTest {
         // Given
@@ -138,82 +281,76 @@ class UserRepositoryFirestoreUnitTest {
         } returns getDefaultSetUserTask {
             every { this@getDefaultSetUserTask.exception } returns exception
         }
-
+        
         // When
         val result = userRepositoryFirestore.saveUser(provideUserEntity())
-
+        
         // Then
         assertThat(result).isFalse()
     }
-
+    //endregion
     
-    @Ignore
     @Test
     fun `nominal case - get user`() = testCoroutineRule.runTest {
-        // Mocking dependencies
-        val collectionReference: CollectionReference = mockk()
-        val documentReference: DocumentReference = mockk()
-        val documentSnapshot: DocumentSnapshot = mockk()
-    
-        // Mock UserDto
-        val userDto = UserDto(DEFAULT_ID, DEFAULT_NAME, DEFAULT_EMAIL, DEFAULT_PHOTO_URL, false)
-    
-        val eventListenerSlot = slot<EventListener<DocumentSnapshot>>()
-        justRun {
-            documentReference.addSnapshotListener(capture(eventListenerSlot))
-        }
-        every { documentSnapshot.toObject<UserDto>() } returns userDto
-        every { documentSnapshot.exists() } returns true
-        every { firestore.collection("users") } returns collectionReference
-        every { collectionReference.document(any()) } returns documentReference
-
-        // Simulate the snapshot listener
-        eventListenerSlot.captured.onEvent(documentSnapshot, null)
-    
-        // Calling the function to be tested
-        val flow = userRepositoryFirestore.getUser(DEFAULT_ID)
-    
-        // Use turbine to test emissions
-        flow.test {
+        val listenerRegistration = mockk<ListenerRegistration>()
+        justRun { listenerRegistration.remove() }
+        
+        val slot = slot<EventListener<DocumentSnapshot>>()
+        every {
+            firestore.collection("users")
+                .document(DEFAULT_ID)
+                .addSnapshotListener(capture(slot))
+        } returns listenerRegistration
+        
+        userRepositoryFirestore.getUser(DEFAULT_ID).test {
+            runCurrent()
+            
+            val documentSnapshotUserDto = mockk<DocumentSnapshot> {
+                every { toObject(UserDto::class.java) } returns provideUserDto()
+            }
+            
+            slot.captured.onEvent(documentSnapshotUserDto, null)
+            
             val userEntity = awaitItem()
-            assertEquals(DEFAULT_ID, userEntity?.id)
-            assertEquals(DEFAULT_NAME, userEntity?.name)
-            assertEquals(DEFAULT_EMAIL, userEntity?.email)
-            assertEquals(DEFAULT_PHOTO_URL, userEntity?.photoUrl)
-            assertEquals(false, userEntity?.isEating)
-            awaitComplete()
+            cancel()
+            
+            assertEquals(provideUserEntity(), userEntity)
+            verify(exactly = 1) {
+                listenerRegistration.remove()
+                firestore.collection("users")
+                    .document(DEFAULT_ID)
+                    .addSnapshotListener(any())
+            }
+        }
+    }
+    
+    private inline fun getDefaultSetUserTask(crossinline mockkBlock: Task<Void>.() -> Unit = {}): Task<Void> =
+        mockk {
+            every { isComplete } returns true
+            every { exception } returns null
+            every { isCanceled } returns false
+            every { result } returns mockk()
+            
+            mockkBlock(this)
         }
     
-        // Verifying the interactions
-        coVerify { documentReference.addSnapshotListener(any()) }
-
-    }
-    
-    private inline fun getDefaultSetUserTask(crossinline mockkBlock: Task<Void>.() -> Unit = {}): Task<Void> = mockk {
-        every { isComplete } returns true
-        every { exception } returns null
-        every { isCanceled } returns false
-        every { result } returns mockk()
-
-        mockkBlock(this)
-    }
-    
-
     //Region out
     private fun provideUserEntity() = UserEntity(
         id = DEFAULT_ID,
         name = DEFAULT_NAME,
         email = DEFAULT_EMAIL,
         photoUrl = DEFAULT_PHOTO_URL,
-        isEating = false
+        eating = false,
+        hadNotificationOn = true
     )
-
+    
     private fun provideUserDto() = UserDto(
         uuid = DEFAULT_ID,
         name = DEFAULT_NAME,
         emailAddress = DEFAULT_EMAIL,
         picture = DEFAULT_PHOTO_URL,
-        isEating = false
+        eating = false,
+        hadNotificationOn = true
     )
     //end Region out
 }

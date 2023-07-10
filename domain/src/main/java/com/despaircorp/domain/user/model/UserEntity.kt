@@ -5,5 +5,6 @@ data class UserEntity(
     val name: String,
     val email: String,
     val photoUrl: String?,
-    val isEating: Boolean
+    val eating: Boolean,
+    val hadNotificationOn: Boolean
 )

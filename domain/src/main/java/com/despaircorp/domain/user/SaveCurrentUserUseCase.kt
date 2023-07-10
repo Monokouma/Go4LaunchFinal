@@ -10,7 +10,7 @@ class SaveCurrentUserUseCase @Inject constructor(
 ) {
     suspend fun invoke(): Boolean {
         val user = authenticationRepository.getUser()
-
+        
         return if (user != null) {
             userRepository.saveUser(
                 UserEntity(
@@ -18,7 +18,8 @@ class SaveCurrentUserUseCase @Inject constructor(
                     name = user.name,
                     email = user.email,
                     photoUrl = user.photoUrl,
-                    isEating = false
+                    eating = false,
+                    hadNotificationOn = true
                 )
             )
         } else {

@@ -10,15 +10,14 @@ import javax.inject.Inject
 
 class RestaurantDetailsRetrofitRepository @Inject constructor(
     private val placesApi: GooglePlacesApi,
-): RestaurantDetailsRepository {
-   
-    
+) : RestaurantDetailsRepository {
+
     override suspend fun getRestaurantDetailsByPlaceId(placeId: String): RestaurantDetailsEntity? {
         val restaurantDetailsDto = placesApi.getPlacesDetails(
             apiKey = BuildConfig.MAPS_API_KEY,
-            placeId =  placeId
+            placeId = placeId
         )
-        
+
         return RestaurantDetailsEntity(
             name = restaurantDetailsDto?.result?.name ?: return null,
             rating = restaurantDetailsDto.result.rating as Double,
@@ -26,8 +25,8 @@ class RestaurantDetailsRetrofitRepository @Inject constructor(
             vicinity = restaurantDetailsDto.result.vicinity ?: return null,
             websiteUrl = restaurantDetailsDto.result.url,
             phoneNumber = restaurantDetailsDto.result.formattedPhoneNumber,
-            latitude = restaurantDetailsDto.result.geometry?.location?.lat.let { Latitude(it!!) },
-            longitude = restaurantDetailsDto.result.geometry?.location?.lng.let { Longitude(it!!) },
+            latitude = restaurantDetailsDto.result.geometry?.location?.lat?.let { Latitude(it) } ?: return null,
+            longitude = restaurantDetailsDto.result.geometry.location.lng?.let { Longitude(it) } ?: return null,
         )
     }
 }

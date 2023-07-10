@@ -1,22 +1,18 @@
 package com.despaircorp.domain.user
 
+import assertk.assertThat
+import assertk.assertions.isEqualTo
 import com.despaircorp.domain.authentication.AuthenticationRepository
 import com.despaircorp.domain.authentication.model.AuthenticatedUser
 import com.despaircorp.domain.user.model.UserEntity
 import com.despaircorp.domain.utils.TestCoroutineRule
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.confirmVerified
 import io.mockk.mockk
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import app.cash.turbine.test
-import assertk.assertThat
-import assertk.assertions.isEqualTo
-import io.mockk.coVerify
-import io.mockk.confirmVerified
-import io.mockk.every
 
 class SaveCurrentUserUsedCaseUnitTest {
     
@@ -63,7 +59,7 @@ class SaveCurrentUserUsedCaseUnitTest {
     fun `edge case - null authenticated user`() = testCoroutineRule.runTest {
         //Given
         coEvery { authenticationRepository.getUser() } returns null
-    
+        
         //When
         val result = saveCurrentUserUseCase.invoke()
         
@@ -89,7 +85,8 @@ class SaveCurrentUserUsedCaseUnitTest {
         name = DEFAULT_NAME,
         email = DEFAULT_EMAIL,
         photoUrl = DEFAULT_PHOTO_URL,
-        isEating = false
+        eating = false,
+        hadNotificationOn = true
     )
     //end region IN
 }

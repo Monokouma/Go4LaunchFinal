@@ -12,7 +12,7 @@ import com.despaircorp.ui.utils.setTextColorRes
 
 
 class RestaurantsAdapter(
-    val restaurantsListener: RestaurantsListener
+    private val restaurantsListener: RestaurantsListener
 ) : ListAdapter<RestaurantsViewStateItems, RestaurantsAdapter.RestaurantViewHolder>(
     RestaurantDiffUtil
 ) {

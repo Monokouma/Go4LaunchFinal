@@ -1,10 +1,9 @@
 package com.despaircorp.ui.restaurants.details
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import assertk.assertAll
+import androidx.lifecycle.SavedStateHandle
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import com.despaircorp.domain.location.model.Latitude
 import com.despaircorp.domain.location.model.Longitude
@@ -14,12 +13,10 @@ import com.despaircorp.ui.BuildConfig
 import com.despaircorp.ui.utils.TestCoroutineRule
 import com.despaircorp.ui.utils.observeForTesting
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.StringBuilder
 
 class RestaurantDetailsViewModelTest {
     
@@ -33,7 +30,8 @@ class RestaurantDetailsViewModelTest {
         private const val DEFAULT_VICINITY = "DEFAULT_VICINITY"
         private const val DEFAULT_WEBSITE_URL = "DEFAULT_WEBSITE_URL"
         private const val DEFAULT_PHONE_NUMBER = "DEFAULT_PHONE_NUMBER"
-    
+        
+        const val ARG_PLACE_ID = "ARG_PLACE_ID"
     }
     
     @get:Rule
@@ -44,9 +42,13 @@ class RestaurantDetailsViewModelTest {
     
     private val getRestaurantDetailsByPlaceIdUseCase: GetRestaurantDetailsByPlaceIdUseCase = mockk()
     
+    
     val viewModel = RestaurantDetailsViewModel(
         coroutineDispatcherProvider = testCoroutineRule.getTestCoroutineDispatcherProvider(),
         getRestaurantDetailsByPlaceIdUseCase = getRestaurantDetailsByPlaceIdUseCase,
+        savedStateHandle = SavedStateHandle().apply {
+            set(ARG_PLACE_ID, DEFAULT_PLACE_ID)
+        },
     )
     
     @Before
@@ -57,9 +59,6 @@ class RestaurantDetailsViewModelTest {
     
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
-        //Given
-        viewModel.onCreateActivity(DEFAULT_PLACE_ID)
-        
         //When
         viewModel.viewState.observeForTesting(this) {
             //Then
@@ -69,6 +68,9 @@ class RestaurantDetailsViewModelTest {
     
     @Test
     fun `edge case - placeId is null`() = testCoroutineRule.runTest {
+        
+        
+        coEvery { getRestaurantDetailsByPlaceIdUseCase.invoke(DEFAULT_PLACE_ID) } returns null
         
         viewModel.viewState.observeForTesting(this) {
             assertThat(it.value).isNull()

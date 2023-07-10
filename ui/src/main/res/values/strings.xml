@@ -35,4 +35,17 @@
     <string name="call">CALL</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="settings_string">Settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="change_your_username_here">Change your username here !</string>
+    <string name="change_your_email_here">Change your email here !</string>
+    <string name="change_your_password_here">Change your password here !</string>
+    <string name="new_username">New Username</string>
+    <string name="new_email">New Email</string>
+    <string name="ok">OK</string>
+    <string name="new_password">New Password</string>
+    <string name="error_in_new_username">Error in new username</string>
+    <string name="error_in_new_email">Error in new email</string>
+    <string name="error_in_new_password">Error in new password</string>
+    <string name="changed_with_success">Changed with success</string>
 </resources>
