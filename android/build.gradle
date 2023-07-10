@@ -54,7 +54,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
     }
 }
 
@@ -63,6 +63,7 @@ dependencies {
     implementation project(path: ':ui')
     implementation project(path: ':data')
     implementation project(path: ':domain')
+
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
