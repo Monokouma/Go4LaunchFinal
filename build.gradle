@@ -28,40 +28,42 @@ koverMerged {
     filters {
         classes {
             excludes.addAll(
-                [
-                    // Hilt
-                    "dagger.hilt.*",
-                    "hilt_aggregated_deps.*",
-                    "*_Factory",
-                    "*_Factory\$*",
-                    "*_*Factory",
-                    "*_*Factory\$*",
-                    "*_Impl",
-                    "*_Impl\$*",
-                    "*.DataModule",
-                    "*.DataModule\$*",
-                    "*_MembersInjector",
-                    "*_HiltModules",
-                    "*_HiltModules\$*",
+                    [
+                            // Hilt
+                            "dagger.hilt.*",
+                            "hilt_aggregated_deps.*",
+                            "*_Factory",
+                            "*_Factory\$*",
+                            "*_*Factory",
+                            "*_*Factory\$*",
+                            "*_Impl",
+                            "*_Impl\$*",
+                            "*.DataModule",
+                            "*.DataModule\$*",
+                            "*_MembersInjector",
+                            "*_HiltModules",
+                            "*_HiltModules\$*",
 
-                    // Gradle Generated
-                    "com.despaircorp.myapplication.BuildConfig",
-                    "com.despaircorp.myapplication.data.BuildConfigResolver", // Can't mockK static field: https://github.com/mockk/mockk/issues/107
-
-                    // TODO: Remove below when Kover can handle Android integration tests!
-                    // Android UI
-                    "*MainApplication",
-                    "*MainApplication\$*",
-                    "*Fragment",
-                    "*Fragment\$*",
-                    "*Activity",
-                    "*Activity\$*",
-                    "*AppDatabase",
-                    "*AppDatabase\$*",
-                    "com.despaircorp.myapplication.databinding.*", // ViewBinding
-                    "*Adapter",
-                    "*Adapter\$*",
-                ]
+                            // Gradle Generated
+                            "com.despaircorp.myapplication.BuildConfig",
+                            "com.despaircorp.myapplication.data.BuildConfigResolver", // Can't mockK static field: https://github.com/mockk/mockk/issues/107
+                            "com.despaircorp.domain.BuildConfig",
+                            "com.despaircorp.ui.BuildConfig",
+                            "com.despaircorp.data.BuildConfig",
+                            // TODO: Remove below when Kover can handle Android integration tests!
+                            // Android UI
+                            "*MainApplication",
+                            "*MainApplication\$*",
+                            "*Fragment",
+                            "*Fragment\$*",
+                            "*Activity",
+                            "*Activity\$*",
+                            "*AppDatabase",
+                            "*AppDatabase\$*",
+                            "com.despaircorp.myapplication.databinding.*", // ViewBinding
+                            "*Adapter",
+                            "*Adapter\$*",
+                    ]
             )
         }
     }
