@@ -45,32 +45,12 @@ class UserRepositoryFirestore @Inject constructor(
         }
     }
     
-    override suspend fun saveNewUserName(userName: String): Boolean {
-        return withContext(dispatcher.io) {
-            try {
-                firestore
-                    .collection("users")
-                    .document(auth.currentUser?.uid ?: return@withContext false)
-                    .update("name", userName)
-                    .await()
-                true
-            } catch (e: Exception) {
-                coroutineContext.ensureActive()
-                e.printStackTrace()
-                false
-            }
-        }
-    }
-    
-    override suspend fun saveNewEmail(email: String): Boolean {
-        return try {
-            
-            auth.currentUser?.updateEmail(email) ?: return false
-            
+    override suspend fun saveNewUserName(userName: String): Boolean = withContext(dispatcher.io) {
+        try {
             firestore
                 .collection("users")
-                .document(auth.currentUser?.uid ?: return false)
-                .update("emailAddress", email)
+                .document(auth.currentUser?.uid ?: return@withContext false)
+                .update("name", userName)
                 .await()
             true
         } catch (e: Exception) {
@@ -80,6 +60,24 @@ class UserRepositoryFirestore @Inject constructor(
         }
     }
     
+    override suspend fun saveNewEmail(email: String): Boolean = withContext(dispatcher.io) {
+        try {
+            auth.currentUser?.updateEmail(email) ?: return@withContext false
+
+            firestore
+                .collection("users")
+                .document(auth.currentUser?.uid ?: return@withContext false)
+                .update("emailAddress", email)
+                .await()
+            true
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            e.printStackTrace()
+            false
+        }
+    }
+
+    // TODO Mono dans un autre repo
     override suspend fun saveNewPassword(password: String): Boolean {
         return try {
             auth.currentUser?.updatePassword(password) ?: return false
