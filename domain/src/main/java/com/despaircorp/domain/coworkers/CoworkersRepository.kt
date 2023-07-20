@@ -1,8 +1,8 @@
 package com.despaircorp.domain.coworkers
 
-import com.despaircorp.domain.user.model.UserEntity
+import com.despaircorp.domain.coworkers.model.CoworkerEntity
 import kotlinx.coroutines.flow.Flow
 
 interface CoworkersRepository {
-    fun getCoworkers()
+    fun getCoworkers(): Flow<List<CoworkerEntity>>
 }

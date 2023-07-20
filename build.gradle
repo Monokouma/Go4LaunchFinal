@@ -63,6 +63,10 @@ koverMerged {
                             "com.despaircorp.myapplication.databinding.*", // ViewBinding
                             "*Adapter",
                             "*Adapter\$*",
+                            "com.despaircorp.ui.databinding",
+                            "com.despaircorp.domain.utils",
+                            "com.despaircorp.ui.utils",
+                            "com.despaircorp.data.utils",
                     ]
             )
         }

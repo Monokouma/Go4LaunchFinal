@@ -48,4 +48,6 @@
     <string name="error_in_new_email">Error in new email</string>
     <string name="error_in_new_password">Error in new password</string>
     <string name="changed_with_success">Changed with success</string>
+    <string name="eating_at">mange à :</string>
+    <string name="not_eating">n\'est pas entrain de manger</string>
 </resources>

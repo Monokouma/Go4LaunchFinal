@@ -4,21 +4,32 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.coworkers.GetCoworkersFromFirebaseUseCase
-import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class WorkmatesViewModel @Inject constructor(
     private val getCoworkersFromFirebaseUseCase: GetCoworkersFromFirebaseUseCase,
-    coroutineDispatcherProvider: CoroutineDispatcherProvider,
+) : ViewModel() {
     
-    ): ViewModel() {
-    
-    val workmatesViewStateLiveData: LiveData<WorkmatesViewState> = liveData(coroutineDispatcherProvider.io) {
-        getCoworkersFromFirebaseUseCase.invoke()
-        
-    }
+    val workmatesViewStateLiveData: LiveData<WorkmatesViewState> =
+        liveData() {
+            getCoworkersFromFirebaseUseCase.invoke().collect { coworkers ->
+                emit(
+                    WorkmatesViewState(
+                        workmatesViewStateItems = coworkers.map { coworkerEntity ->
+                            WorkmatesViewStateItems(
+                                name = coworkerEntity.name,
+                                isEating = coworkerEntity.eating,
+                                restaurantChoice = coworkerEntity.email,
+                                image = coworkerEntity.photoUrl,
+                            )
+                        }
+                    )
+                )
+            }
+            
+        }
     
     fun test() {
         getCoworkersFromFirebaseUseCase.invoke()

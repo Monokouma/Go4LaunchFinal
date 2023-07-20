@@ -2,10 +2,8 @@ package com.despaircorp.ui.workmates
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.WorkmatesFragmentBinding
@@ -20,10 +18,11 @@ class WorkmatesFragment : Fragment(R.layout.workmates_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = WorkmatesAdapter()
-        
+        binding.workmateFragmentCoworkerRecyclerView.layoutManager
         binding.workmateFragmentCoworkerRecyclerView.adapter = adapter
         viewModel.test()
         viewModel.workmatesViewStateLiveData.observe(viewLifecycleOwner) {
+            Log.i("Monokouma", it.toString())
             adapter.submitList(it.workmatesViewStateItems)
         }
     }
