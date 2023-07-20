@@ -10,45 +10,37 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CoworkersFirebaseRepository @Inject constructor(
     private val firestore: FirebaseFirestore,
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
 ) : CoworkersRepository {
     override fun getCoworkers(): Flow<List<CoworkerEntity>> = callbackFlow {
-        val coworkerEntity = mutableListOf<CoworkerEntity>()
-        
         val registration = firestore.collection("users")
-            .get()
-            .addOnSuccessListener { documents ->
-                documents.forEach { document ->
-                    
+            .addSnapshotListener { value, error ->
+                error?.printStackTrace()
+                value?.documents?.mapNotNull { document ->
                     val coworkersDto = try {
                         document?.toObject<CoworkersDto>()
                     } catch (e: Exception) {
                         e.printStackTrace()
                         null
                     }
-                    
-                    coworkerEntity.add(
-                        CoworkerEntity(
-                            id = coworkersDto?.uuid ?: return@addOnSuccessListener,
-                            name = coworkersDto.name ?: return@addOnSuccessListener,
-                            email = coworkersDto.emailAddress ?: return@addOnSuccessListener,
-                            photoUrl = coworkersDto.picture,
-                            eating = coworkersDto.eating ?: return@addOnSuccessListener,
-                            hadNotificationOn = coworkersDto.hadNotificationOn
-                                ?: return@addOnSuccessListener,
-                        )
+
+                    CoworkerEntity(
+                        id = coworkersDto?.uuid ?: return@mapNotNull null,
+                        name = coworkersDto.name ?: return@mapNotNull null,
+                        email = coworkersDto.emailAddress ?: return@mapNotNull null,
+                        photoUrl = coworkersDto.picture,
+                        eating = coworkersDto.eating ?: return@mapNotNull null,
+                        hadNotificationOn = coworkersDto.hadNotificationOn ?: return@mapNotNull null,
                     )
-                    
+                }?.let {
+                    trySend(it)
                 }
-                trySend(
-                    coworkerEntity
-                )
             }
-        awaitClose { registration }
-        
+        awaitClose { registration.remove() }
     }.flowOn(coroutineDispatcherProvider.io)
-    
 }

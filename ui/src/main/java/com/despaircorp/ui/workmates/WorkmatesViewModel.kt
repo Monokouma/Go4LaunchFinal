@@ -11,27 +11,21 @@ import javax.inject.Inject
 class WorkmatesViewModel @Inject constructor(
     private val getCoworkersFromFirebaseUseCase: GetCoworkersFromFirebaseUseCase,
 ) : ViewModel() {
-    
-    val workmatesViewStateLiveData: LiveData<WorkmatesViewState> =
-        liveData() {
-            getCoworkersFromFirebaseUseCase.invoke().collect { coworkers ->
-                emit(
-                    WorkmatesViewState(
-                        workmatesViewStateItems = coworkers.map { coworkerEntity ->
-                            WorkmatesViewStateItems(
-                                name = coworkerEntity.name,
-                                isEating = coworkerEntity.eating,
-                                restaurantChoice = coworkerEntity.email,
-                                image = coworkerEntity.photoUrl,
-                            )
-                        }
-                    )
+
+    val workmatesViewStateLiveData: LiveData<WorkmatesViewState> = liveData {
+        getCoworkersFromFirebaseUseCase.invoke().collect { coworkers ->
+            emit(
+                WorkmatesViewState(
+                    workmatesViewStateItems = coworkers.map { coworkerEntity ->
+                        WorkmatesViewStateItem(
+                            name = coworkerEntity.name,
+                            isEating = coworkerEntity.eating,
+                            restaurantChoice = coworkerEntity.email,
+                            image = coworkerEntity.photoUrl,
+                        )
+                    }
                 )
-            }
-            
+            )
         }
-    
-    fun test() {
-        getCoworkersFromFirebaseUseCase.invoke()
     }
 }
