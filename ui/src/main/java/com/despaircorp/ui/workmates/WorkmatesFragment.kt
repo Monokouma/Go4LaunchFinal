@@ -17,11 +17,10 @@ class WorkmatesFragment : Fragment(R.layout.workmates_fragment) {
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = WorkmatesAdapter()
-        binding.workmateFragmentCoworkerRecyclerView.adapter = adapter
+
         viewModel.workmatesViewStateLiveData.observe(viewLifecycleOwner) {
             Log.i("Monokouma", it.toString())
-            adapter.submitList(it.workmatesViewStateItems)
+            binding.workmatesCoworkerList.bind(it.coworkerRowViewStates)
         }
     }
 }

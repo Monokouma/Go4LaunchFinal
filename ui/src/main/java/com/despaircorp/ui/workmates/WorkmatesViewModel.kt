@@ -3,12 +3,14 @@ package com.despaircorp.ui.workmates
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.despaircorp.atoms.coworker.CoworkerRowMapper
 import com.despaircorp.domain.coworkers.GetCoworkersFromFirebaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class WorkmatesViewModel @Inject constructor(
+    private val coworkerRowMapper: CoworkerRowMapper,
     private val getCoworkersFromFirebaseUseCase: GetCoworkersFromFirebaseUseCase,
 ) : ViewModel() {
 
@@ -16,12 +18,13 @@ class WorkmatesViewModel @Inject constructor(
         getCoworkersFromFirebaseUseCase.invoke().collect { coworkers ->
             emit(
                 WorkmatesViewState(
-                    workmatesViewStateItems = coworkers.map { coworkerEntity ->
-                        WorkmatesViewStateItem(
-                            name = coworkerEntity.name,
-                            isEating = coworkerEntity.eating,
-                            restaurantChoice = coworkerEntity.email,
-                            image = coworkerEntity.photoUrl,
+                    coworkerRowViewStates = coworkers.map { coworkerEntity ->
+                        coworkerRowMapper.map(
+                            imageUrl = coworkerEntity.photoUrl,
+                            sentence = coworkerEntity.email,
+                            onClick = {
+                                android.util.Log.d("Mono", "WorkmatesViewModel.row clicked")
+                            }
                         )
                     }
                 )
